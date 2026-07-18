@@ -5,6 +5,14 @@ import { CPEstimasi, CPItem } from './db';
 
 const fmtRp = (n: number) => 'Rp ' + Math.round(n || 0).toLocaleString('id-ID');
 
+/**
+ * Strips the redundant "Kelas " prefix so the tier is shown once.
+ * "Kelas I" → "I" | "Kelas III" → "III" | "VIP" → "VIP" | "ICU" → "ICU"
+ * Used in PDF/Excel headers where the word "Kelas" is already the column label.
+ */
+const stripKelasPrefix = (k: string): string =>
+  k.replace(/^kelas\s+/i, '').trim() || k;
+
 // ── Category mapping ──────────────────────────────────────────────────────────
 
 const KATEGORI_ORDER = [
@@ -61,7 +69,7 @@ export const generateCPPDF = (cp: CPEstimasi, rsName: string): void => {
     [`No. RM`, cp.noRM, `Episode`, cp.episodeNo],
     [`Nama Pasien`, cp.namaPasien, `Tgl Masuk`, cp.tanggalMasuk],
     [`Dokter DPJP`, cp.dpjp, `Penjamin`, cp.penjamin],
-    [`Diagnosa`, cp.diagnosaPrimer, `Kelas`, cp.kelasKamar],
+    [`Diagnosa`, cp.diagnosaPrimer, `Kelas Kamar`, cp.kelasKamar],
     [`Lama Rawat`, `${cp.lamaRawat} hari`, ``, ``],
   ];
 
@@ -172,7 +180,7 @@ export const exportCPToExcel = (cp: CPEstimasi, rsName: string = ''): void => {
   data.push([`Lama rawat : ${cp.lamaRawat} hari (${cp.tanggalMasuk})`, '', '', '']);
   merges.push({ s: { r: 2, c: 0 }, e: { r: 2, c: 3 } });
 
-  data.push([`Nama Pasien : ${cp.namaPasien}`, '', `KELAS ${cp.kelasKamar.toUpperCase()}`, '']);
+  data.push([`Nama Pasien : ${cp.namaPasien}`, '', `KELAS ${stripKelasPrefix(cp.kelasKamar).toUpperCase()}`, '']);
   merges.push({ s: { r: 3, c: 0 }, e: { r: 3, c: 1 } });
   merges.push({ s: { r: 3, c: 2 }, e: { r: 3, c: 3 } });
 
