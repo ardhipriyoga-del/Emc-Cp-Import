@@ -55,22 +55,33 @@ const emptyCustomForm = () => ({
 });
 
 // ── Kelas Kamar → Master Tarif mapping (single source of truth) ──────────────
-
-/** Add/update entries here; no other place needs to change. */
-const KELAS_MAP: Record<string, string[]> = {
-  'Kelas III': ['iii', '3', 'kelas iii', 'kelas3'],
-  'Kelas II':  ['ii', '2', 'kelas ii', 'kelas2'],
-  'Kelas I':   ['i', '1', 'kelas i', 'kelas1'],
-  'VIP':       ['vip', 'premium'],
-  'Suite':     ['suite'],
+//
+// Patient data uses:  "Kelas III" | "Kelas II" | "Kelas I" | "VIP" | "Suite"
+// Master Tarif uses:  "Class III" | "Class II" | "Class I" | "VIP" | "Suite" | "Premium"
+//
+// Add/update entries here only — no other place needs to change.
+const KELAS_MAP: Record<string, string> = {
+  'Kelas III': 'Class III',
+  'Kelas II':  'Class II',
+  'Kelas I':   'Class I',
+  'VIP':       'VIP',
+  'Suite':     'Suite',
+  'Premium':   'Premium',
 };
 
-/** True if a Master Tarif kelasTarif string matches the CP kelas selection. */
-const matchesKelas = (kelasTarif: string, kelasKamar: string): boolean => {
-  const norm = kelasTarif.toLowerCase().replace(/^kelas\s+/i, '').trim();
-  const targets = KELAS_MAP[kelasKamar] ?? [kelasKamar.toLowerCase().replace(/^kelas\s+/i, '').trim()];
-  return targets.some(t => t === norm);
-};
+/**
+ * Returns the Master Tarif class string that corresponds to the patient's
+ * room class. Falls back to the raw value if the kelas is not in the map.
+ */
+const toMasterTarifKelas = (kelasKamar: string): string =>
+  KELAS_MAP[kelasKamar] ?? kelasKamar;
+
+/**
+ * True if a Master Tarif kelasTarif value matches the patient's room class.
+ * Comparison is case-insensitive and ignores leading/trailing whitespace.
+ */
+const matchesKelas = (kelasTarif: string, kelasKamar: string): boolean =>
+  kelasTarif.trim().toLowerCase() === toMasterTarifKelas(kelasKamar).trim().toLowerCase();
 
 /** Keywords that flag a tarif item as room/accommodation. */
 const KAMAR_KEYWORDS = ['akomodasi', 'kamar', 'rawat inap', 'room', 'perawatan kamar'];
@@ -236,7 +247,8 @@ export default function CPPage() {
     // Identify accommodation/room candidates
     const kamarItems = filtered.filter(it => isKamarItem(it.orderItem));
     if (kamarItems.length === 0) {
-      setKamarWarning('Tarif kamar untuk kelas ini belum tersedia pada Master Tarif.');
+      const mappedKelas = toMasterTarifKelas(kelasKamar);
+      setKamarWarning(`Tidak ada item Master Tarif untuk ${mappedKelas}.`);
       setKamarCandidates([]);
     } else if (kamarItems.length === 1) {
       setKamarWarning('');
