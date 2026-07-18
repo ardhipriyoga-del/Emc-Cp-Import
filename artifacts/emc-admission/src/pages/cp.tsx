@@ -19,7 +19,7 @@ import {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const KELAS_KAMAR = ['Kelas III', 'Kelas II', 'Kelas I', 'VIP', 'Suite'];
+const KELAS_KAMAR = ['Kelas III', 'Kelas II', 'Kelas I', 'VIP', 'Suite', 'ICU', 'HCU', 'Isolasi'];
 
 const CP_KATEGORI = [
   'Kamar', 'Laboratorium', 'Radiologi', 'Farmasi', 'Alkes', 'BHP',
@@ -56,8 +56,8 @@ const emptyCustomForm = () => ({
 
 // ── Kelas Kamar → Master Tarif mapping (single source of truth) ──────────────
 //
-// Patient data uses:  "Kelas III" | "Kelas II" | "Kelas I" | "VIP" | "Suite"
-// Master Tarif uses:  "Class III" | "Class II" | "Class I" | "VIP" | "Suite" | "Premium"
+// Patient data uses:  "Kelas III" | "Kelas II" | "Kelas I" | "VIP" | "Suite" | "ICU" | "HCU" | "Isolasi"
+// Master Tarif uses:  "Class III" | "Class II" | "Class I" | "VIP" | "Suite" | "Premium" | "ICU" | "HCU" | "Isolasi"
 //
 // Add/update entries here only — no other place needs to change.
 const KELAS_MAP: Record<string, string> = {
@@ -67,6 +67,9 @@ const KELAS_MAP: Record<string, string> = {
   'VIP':       'VIP',
   'Suite':     'Suite',
   'Premium':   'Premium',
+  'ICU':       'ICU',
+  'HCU':       'HCU',
+  'Isolasi':   'Isolasi',
 };
 
 /**
@@ -83,10 +86,25 @@ const toMasterTarifKelas = (kelasKamar: string): string =>
 const matchesKelas = (kelasTarif: string, kelasKamar: string): boolean =>
   kelasTarif.trim().toLowerCase() === toMasterTarifKelas(kelasKamar).trim().toLowerCase();
 
-/** Keywords that flag a tarif item as room/accommodation. */
-const KAMAR_KEYWORDS = ['akomodasi', 'kamar', 'rawat inap', 'room', 'perawatan kamar'];
-const isKamarItem = (name: string) =>
-  KAMAR_KEYWORDS.some(k => name.toLowerCase().includes(k));
+/**
+ * Keywords that indicate a Master Tarif item is a ward/room accommodation charge.
+ * An item must match at least one INCLUDE keyword and zero EXCLUDE keywords.
+ *
+ * EXCLUDE takes priority — e.g. "Kamar Operasi" contains "kamar" (include)
+ * but also "operasi" (exclude), so it is correctly rejected.
+ */
+const KAMAR_INCLUDE_KEYWORDS = [
+  'akomodasi', 'kamar', 'rawat inap', 'room', 'perawatan kamar',
+  'icu', 'hcu', 'isolasi', 'intensif', 'intermediate',
+];
+const KAMAR_EXCLUDE_KEYWORDS = [
+  'operasi', 'kamar ok', 'ok besar', 'ok kecil', 'operating', 'bedah sentral',
+];
+const isKamarItem = (name: string) => {
+  const lower = name.toLowerCase();
+  if (KAMAR_EXCLUDE_KEYWORDS.some(k => lower.includes(k))) return false;
+  return KAMAR_INCLUDE_KEYWORDS.some(k => lower.includes(k));
+};
 
 /** Keywords that flag a tarif item as a doctor visit fee. */
 const VD_KEYWORDS = ['visit', 'visite', 'dokter', 'dpjp', 'jasa dokter'];
