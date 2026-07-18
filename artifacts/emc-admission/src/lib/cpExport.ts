@@ -155,7 +155,7 @@ export const generateCPPDF = (cp: CPEstimasi, rsName: string): void => {
     doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
     doc.text(
-      `Dicetak: ${new Date().toLocaleString('id-ID')} | EMC Admission Operan | Hal ${i}/${pageCount}`,
+      `Dicetak: ${new Date().toLocaleString('id-ID')} | IP Admission Workspace | Hal ${i}/${pageCount}`,
       40, doc.internal.pageSize.height - 20
     );
   }

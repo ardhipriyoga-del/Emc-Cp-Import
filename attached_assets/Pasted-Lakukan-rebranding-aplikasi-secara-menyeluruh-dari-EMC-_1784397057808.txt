@@ -1,0 +1,177 @@
+Lakukan rebranding aplikasi secara menyeluruh dari "EMC Admission Operan" menjadi "IP Admission Workspace".
+
+## Branding Utama
+
+Nama aplikasi:
+
+IP Admission Workspace
+
+Tagline:
+
+Integrated Inpatient Admission & Operational Workspace
+
+Gunakan Bootstrap Icon berikut sebagai logo utama di seluruh aplikasi:
+
+bi-clipboard2-pulse-fill
+
+Logo digunakan secara konsisten pada:
+
+- Login
+
+- Sidebar
+
+- Navbar/Header
+
+- Dashboard
+
+- Menu About
+
+- Browser Title
+
+- Footer
+
+- Loading Screen (jika ada)
+
+## Ganti Seluruh Branding
+
+Ganti semua teks berikut:
+
+- EMC Admission Operan
+
+Menjadi:
+
+IP Admission Workspace
+
+Pastikan tidak ada lagi branding lama yang tersisa pada seluruh halaman, popup, modal, title browser, maupun source code.
+
+## Browser Title
+
+IP Admission Workspace
+
+## Sidebar
+
+Tampilkan icon Bootstrap:
+
+bi-clipboard2-pulse-fill
+
+Judul:
+
+IP Admission Workspace
+
+## Login
+
+Judul:
+
+IP Admission Workspace
+
+Subtitle:
+
+Workspace Operasional Admission Rawat Inap RS EMC Pekayon
+
+Tampilkan icon Bootstrap bi-clipboard2-pulse-fill di atas judul login.
+
+## Footer
+
+© 2026 IP Admission Workspace
+
+All Rights Reserved.
+
+Developed by Dedi Supriadi
+
+## Menu About
+
+Judul:
+
+IP Admission Workspace
+
+Icon:
+
+bi-clipboard2-pulse-fill (ukuran besar)
+
+Versi:
+
+Version 1.0.0
+
+Tagline:
+
+Integrated Inpatient Admission & Operational Workspace
+
+Deskripsi:
+
+IP Admission Workspace adalah aplikasi operasional rumah sakit yang dirancang untuk membantu petugas Admission Rawat Inap dalam mengelola seluruh proses kerja secara cepat, akurat, dan terintegrasi.
+
+Aplikasi ini menggabungkan berbagai modul operasional dalam satu workspace, sehingga pengguna tidak perlu berpindah aplikasi untuk melakukan pekerjaan sehari-hari.
+
+Dirancang dengan konsep Offline First menggunakan penyimpanan lokal sehingga tetap dapat digunakan dengan baik pada jaringan internal rumah sakit.
+
+## Modul Aplikasi
+
+- Dashboard
+
+- Admission Workspace
+
+- Operan Pasien
+
+- Estimasi Biaya Rawat Inap
+
+- Master Tarif
+
+- Import Data Excel
+
+- Export PDF
+
+- Pengaturan
+
+- Riwayat Aktivitas
+
+## Keunggulan
+
+- Offline First
+
+- Cepat dan Ringan
+
+- Interface Modern
+
+- Mudah Digunakan
+
+- Import Excel
+
+- Export PDF
+
+- Responsive
+
+- Aman untuk penggunaan internal rumah sakit
+
+## Warna Branding
+
+Primary : #2563EB
+
+Secondary : #10B981
+
+Background : #F8FAFC
+
+Text : #1E293B
+
+Success : #22C55E
+
+Warning : #F59E0B
+
+Danger : #EF4444
+
+## UI
+
+- Gunakan desain dashboard modern bergaya enterprise.
+
+- Gunakan Bootstrap Icons secara konsisten di seluruh menu.
+
+- Gunakan border radius yang konsisten.
+
+- Tambahkan shadow yang halus pada card.
+
+- Gunakan animasi hover yang ringan.
+
+- Pastikan tampilan profesional, bersih, dan responsif.
+
+## Konsistensi
+
+Pastikan seluruh halaman, menu, modal, popup, login, dashboard, footer, browser title, About, export PDF, serta seluruh komponen aplikasi telah menggunakan branding baru "IP Admission Workspace" dan tidak menyisakan identitas "EMC Admission Operan".

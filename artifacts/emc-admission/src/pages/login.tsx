@@ -7,7 +7,7 @@ import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShieldAlert, Activity, Eye, EyeOff } from 'lucide-react';
+import { ShieldAlert, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Login() {
@@ -62,14 +62,14 @@ export default function Login() {
             {rsLogo ? (
               <img src={rsLogo} alt="Logo" className="w-12 h-12 object-contain" />
             ) : (
-              <Activity className="w-10 h-10 text-primary" />
+              <i className="bi bi-clipboard2-pulse-fill text-4xl text-primary" />
             )}
           </div>
           <CardTitle className="text-2xl font-bold tracking-tight text-primary">
-            EMC Admission Operan
+            IP Admission Workspace
           </CardTitle>
           <CardDescription className="text-base font-medium">
-            {rsName}
+            Workspace Operasional Admission Rawat Inap {rsName}
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -2,12 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { getDB } from '../lib/db';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
-  Info, Sparkles, Code2, Database, FileText,
-  Users, BedDouble, Clock, History, Wifi, WifiOff
+  Code2, Database, Users, BedDouble, Clock, History, Wifi, WifiOff,
+  CheckCircle2, Zap, Layout, MousePointer, FileSpreadsheet, FileText,
+  Smartphone, ShieldCheck
 } from 'lucide-react';
 
 const VERSION = '1.0.0';
 const DB_VERSION = '1';
+const APP_NAME = 'IP Admission Workspace';
+const TAGLINE = 'Integrated Inpatient Admission & Operational Workspace';
+
+const MODULES = [
+  'Dashboard',
+  'Admission Workspace',
+  'Operan Pasien',
+  'Estimasi Biaya Rawat Inap',
+  'Master Tarif',
+  'Import Data Excel',
+  'Export PDF',
+  'Pengaturan',
+  'Riwayat Aktivitas',
+];
+
+const FEATURES: { icon: React.ReactNode; label: string }[] = [
+  { icon: <WifiOff className="w-4 h-4" />,         label: 'Offline First' },
+  { icon: <Zap className="w-4 h-4" />,              label: 'Cepat dan Ringan' },
+  { icon: <Layout className="w-4 h-4" />,           label: 'Interface Modern' },
+  { icon: <MousePointer className="w-4 h-4" />,     label: 'Mudah Digunakan' },
+  { icon: <FileSpreadsheet className="w-4 h-4" />,  label: 'Import Excel' },
+  { icon: <FileText className="w-4 h-4" />,         label: 'Export PDF' },
+  { icon: <Smartphone className="w-4 h-4" />,       label: 'Responsive' },
+  { icon: <ShieldCheck className="w-4 h-4" />,      label: 'Aman untuk penggunaan internal rumah sakit' },
+];
 
 export default function AboutPage() {
   const [stats, setStats] = useState({
@@ -57,50 +83,49 @@ export default function AboutPage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
-      {/* Hero */}
-      <Card className="border-primary/30 bg-primary/5">
-        <CardContent className="pt-8 pb-8 flex flex-col items-center text-center gap-3">
-          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="none" className="w-9 h-9 text-primary" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-            </svg>
+
+      {/* ── Hero ── */}
+      <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10">
+        <CardContent className="pt-10 pb-10 flex flex-col items-center text-center gap-4">
+          <div className="w-20 h-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shadow-sm">
+            <i className="bi bi-clipboard2-pulse-fill text-4xl text-primary" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-primary">EMC Admission Operan</h1>
-            <p className="text-sm text-muted-foreground mt-1">Version {VERSION}</p>
+            <h1 className="text-2xl font-bold text-primary">{APP_NAME}</h1>
+            <p className="text-sm font-medium text-muted-foreground mt-1">Version {VERSION}</p>
+            <p className="text-xs text-primary/70 font-semibold mt-1 tracking-wide uppercase">{TAGLINE}</p>
           </div>
-          <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
-            Aplikasi operan pasien berbasis web offline yang dirancang untuk membantu petugas Admission RS EMC
-            dalam mencatat, memantau, dan melakukan handover pending antar shift secara cepat, aman, dan terdokumentasi.
+          <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
+            {APP_NAME} adalah aplikasi operasional rumah sakit yang dirancang untuk membantu petugas
+            Admission Rawat Inap dalam mengelola seluruh proses kerja secara cepat, akurat, dan terintegrasi.
+          </p>
+          <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed -mt-2">
+            Aplikasi ini menggabungkan berbagai modul operasional dalam satu workspace, sehingga pengguna
+            tidak perlu berpindah aplikasi untuk melakukan pekerjaan sehari-hari. Dirancang dengan konsep
+            <strong className="text-foreground"> Offline First</strong> menggunakan penyimpanan lokal sehingga
+            tetap dapat digunakan dengan baik pada jaringan internal rumah sakit.
           </p>
         </CardContent>
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Fitur Utama */}
+
+        {/* ── Modul Aplikasi ── */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              <Sparkles className="w-5 h-5 text-amber-500" /> Fitur Utama
+              <i className="bi bi-grid-3x3-gap-fill text-primary text-base" />
+              Modul Aplikasi
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              {[
-                'Dashboard operan pasien',
-                'Pending Confirmation',
-                'Just Info',
-                'Riwayat Operan',
-                'Operan Shift dengan verifikasi Username & Password',
-                'Export Laporan Operan ke PDF',
-                'Backup & Restore seluruh data menggunakan file Excel',
-                'Import data pasien dari TrakCare',
-                'Pencarian berdasarkan No. RM dan Nama Pasien',
-                'Penyimpanan data lokal (Offline)',
-              ].map(f => (
-                <li key={f} className="flex items-start gap-2">
-                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                  {f}
+              {MODULES.map((m, i) => (
+                <li key={m} className="flex items-center gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center shrink-0">
+                    {i + 1}
+                  </span>
+                  {m}
                 </li>
               ))}
             </ul>
@@ -108,7 +133,27 @@ export default function AboutPage() {
         </Card>
 
         <div className="space-y-6">
-          {/* Developer */}
+          {/* ── Keunggulan ── */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <i className="bi bi-stars text-amber-500 text-base" />
+                Keunggulan
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                {FEATURES.map(f => (
+                  <li key={f.label} className="flex items-center gap-2">
+                    <span className="text-primary shrink-0">{f.icon}</span>
+                    {f.label}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+
+          {/* ── Developer ── */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
@@ -120,30 +165,13 @@ export default function AboutPage() {
               <div className="text-muted-foreground space-y-1">
                 <p>📱 <a href="https://wa.me/6208190261688" className="hover:text-primary transition-colors">08190261688</a></p>
                 <p>✉️ <a href="mailto:nuxarcodex@gmail.com" className="hover:text-primary transition-colors">nuxarcodex@gmail.com</a></p>
-                <p className="pt-1 text-xs">Admission RS EMC Pekayon</p>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Lisensi */}
-          <Card className="border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-amber-900/10">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <FileText className="w-5 h-5 text-amber-600" /> Lisensi
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground leading-relaxed">
-              Aplikasi ini dibuat khusus sebagai sistem operasional internal RS EMC Pekayon.
-              <br /><br />
-              <span className="font-semibold text-amber-700 dark:text-amber-400">
-                Tidak diperkenankan untuk diperjualbelikan atau didistribusikan tanpa izin dari pengembang.
-              </span>
             </CardContent>
           </Card>
         </div>
       </div>
 
-      {/* Info Aplikasi */}
+      {/* ── Info Aplikasi ── */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
@@ -152,16 +180,17 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            <StatItem icon={<Info className="w-4 h-4" />}    label="Versi Database"       value={`v${DB_VERSION}`} />
-            <StatItem icon={<Users className="w-4 h-4" />}   label="Jumlah User"          value={String(stats.users)} />
-            <StatItem icon={<BedDouble className="w-4 h-4" />} label="Pasien Aktif"       value={String(stats.activePasien)} />
-            <StatItem icon={<Clock className="w-4 h-4" />}   label="Pending Aktif"        value={String(stats.activePending)} />
-            <StatItem icon={<History className="w-4 h-4" />} label="Riwayat Operan"       value={String(stats.totalOperan)} />
+            <StatItem icon={<i className="bi bi-clipboard2-pulse-fill text-primary" />} label="Versi Aplikasi"  value={`v${VERSION}`} />
+            <StatItem icon={<Database className="w-4 h-4" />}                           label="Versi Database"  value={`v${DB_VERSION}`} />
+            <StatItem icon={<Users className="w-4 h-4" />}                              label="Jumlah User"     value={String(stats.users)} />
+            <StatItem icon={<BedDouble className="w-4 h-4" />}                          label="Pasien Aktif"    value={String(stats.activePasien)} />
+            <StatItem icon={<Clock className="w-4 h-4" />}                              label="Pending Aktif"   value={String(stats.activePending)} />
+            <StatItem icon={<History className="w-4 h-4" />}                            label="Riwayat Operan"  value={String(stats.totalOperan)} />
             <StatItem
               icon={isOnline
                 ? <Wifi className="w-4 h-4 text-emerald-500" />
                 : <WifiOff className="w-4 h-4 text-amber-500" />}
-              label="Status"
+              label="Status Jaringan"
               value={isOnline ? 'Online' : 'Offline'}
               valueClass={isOnline ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}
             />
@@ -169,6 +198,20 @@ export default function AboutPage() {
           <div className="mt-4 pt-4 border-t border-border text-xs text-muted-foreground">
             Backup terakhir: <span className="font-medium text-foreground">{stats.lastBackup}</span>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* ── License notice ── */}
+      <Card className="border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-amber-900/10">
+        <CardContent className="pt-5 pb-5 text-sm text-muted-foreground leading-relaxed">
+          <p>
+            <strong className="text-foreground">{APP_NAME}</strong> dibuat khusus sebagai sistem operasional
+            internal rumah sakit.
+          </p>
+          <p className="mt-2 font-semibold text-amber-700 dark:text-amber-400">
+            Tidak diperkenankan untuk diperjualbelikan atau didistribusikan tanpa izin dari pengembang.
+          </p>
+          <p className="mt-3 text-xs">© 2026 {APP_NAME} · All Rights Reserved. · Developed by Dedi Supriadi</p>
         </CardContent>
       </Card>
     </div>

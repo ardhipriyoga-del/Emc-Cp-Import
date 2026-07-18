@@ -43,13 +43,31 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         bg-sidebar text-sidebar-foreground border-r border-sidebar-border
         flex flex-col shrink-0
       `}>
-        <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
+        {/* Sidebar header */}
+        <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border gap-2">
           {isSidebarOpen && (
-            <div className="font-bold text-lg text-sidebar-primary-foreground truncate">
-              {rsName}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <i className="bi bi-clipboard2-pulse-fill text-xl text-sidebar-primary shrink-0" />
+              <div className="min-w-0">
+                <div className="font-bold text-sm text-sidebar-primary-foreground truncate leading-tight">
+                  IP Admission Workspace
+                </div>
+                {rsName && (
+                  <div className="text-xs text-sidebar-foreground/60 truncate leading-tight">
+                    {rsName}
+                  </div>
+                )}
+              </div>
             </div>
           )}
-          <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!isSidebarOpen)} className="text-sidebar-foreground hover:bg-sidebar-accent">
+          {!isSidebarOpen && (
+            <i className="bi bi-clipboard2-pulse-fill text-xl text-sidebar-primary mx-auto" />
+          )}
+          <Button
+            variant="ghost" size="icon"
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+            className="text-sidebar-foreground hover:bg-sidebar-accent shrink-0"
+          >
             <Menu className="h-5 w-5" />
           </Button>
         </div>
@@ -112,9 +130,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         
         {/* Footer */}
         <footer className="h-10 shrink-0 border-t bg-card text-card-foreground flex items-center justify-between px-6 text-xs text-muted-foreground font-medium">
-          <div>EMC Admission Operan</div>
+          <div className="flex items-center gap-1.5">
+            <i className="bi bi-clipboard2-pulse-fill text-primary" />
+            <span>© 2026 IP Admission Workspace</span>
+          </div>
           <div>Version 1.0.0</div>
-          <div className="hidden sm:block">Developed by Dedi Supriadi | {rsName}</div>
+          <div className="hidden sm:block">Developed by Dedi Supriadi · All Rights Reserved.</div>
         </footer>
       </main>
     </div>

@@ -22,10 +22,10 @@ export const backupData = async () => {
 
   // App Info Sheet
   const appInfo = [
-    { key: 'AppName', value: 'EMC Admission Operan' },
+    { key: 'AppName', value: 'IP Admission Workspace' },
     { key: 'Version', value: '1.0.0' },
     { key: 'BackupDate', value: new Date().toISOString() },
-    { key: 'Checksum', value: 'EMC_VALID' }
+    { key: 'Checksum', value: 'IPAW_VALID' }
   ];
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(appInfo), 'AppInfo');
   
@@ -40,7 +40,7 @@ export const backupData = async () => {
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(importLogs), 'ImportLogs');
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(activityLogs), 'ActivityLogs');
 
-  const filename = `EMC_Operan_Backup_${new Date().toISOString().replace(/[:.]/g, '-')}.xlsx`;
+  const filename = `IPAW_Backup_${new Date().toISOString().replace(/[:.]/g, '-')}.xlsx`;
   XLSX.writeFile(workbook, filename);
 };
 
@@ -56,7 +56,7 @@ export const restoreData = async (file: File) => {
         if (!workbook.SheetNames.includes('AppInfo')) throw new Error("Invalid backup file: Missing AppInfo");
         const appInfoSheet = XLSX.utils.sheet_to_json<any>(workbook.Sheets['AppInfo']);
         const checksum = appInfoSheet.find(r => r.key === 'Checksum')?.value;
-        if (checksum !== 'EMC_VALID') throw new Error("Invalid backup file: Bad Checksum");
+        if (checksum !== 'IPAW_VALID' && checksum !== 'EMC_VALID') throw new Error("Invalid backup file: Bad Checksum");
 
         const db = await getDB();
         const tx = db.transaction(

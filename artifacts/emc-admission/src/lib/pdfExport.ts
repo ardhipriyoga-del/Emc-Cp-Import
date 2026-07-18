@@ -107,7 +107,7 @@ export const generateHandoverPDF = async (
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
     doc.setFontSize(8);
-    doc.text(`Dicetak otomatis oleh EMC Admission Operan | ${new Date().toLocaleString()} | Hal ${i} dari ${pageCount}`, 40, doc.internal.pageSize.height - 30);
+    doc.text(`Dicetak otomatis oleh IP Admission Workspace | ${new Date().toLocaleString()} | Hal ${i} dari ${pageCount}`, 40, doc.internal.pageSize.height - 30);
   }
 
   // Return base64 string
