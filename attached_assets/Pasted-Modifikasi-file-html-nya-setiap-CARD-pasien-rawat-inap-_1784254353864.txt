@@ -1,0 +1,114 @@
+Modifikasi file html nya setiap CARD pasien rawat inap ada pengisian manual oleh user untuk menyimpan No HP Penanggung Jawab Pasien (disimpan di tiap No Episode) yang nantinya akan jadi modal untuk Generate Pesan Kasir
+
+lalu tambahkan menu “Pesan Kasir” untuk mengkonfirmasi setiap Obat dan Pemeriksaan.
+Contoh output yang akan tampil :
+
+
+- Generate Pesan Konfirmasi Obat dengan Penjamin Pribadi
+
+Selamat Pagi/Siang/Sore/Malam
+Salam Sehat.
+
+Kami dari bagian kasir rawat inap RS EMC Pekayon.
+Konfirmasi untuk pasien *Nama Pasien Di Isi Manual Oleh User* dari dokter diresepkan obat :
+
+(Daftar Obat dan Estimasi di isi manual oleh user secara custom)
+
+Apakah dari pihak keluarga bersedia untuk acc pribadi dilakukan/diberikan?
+
+Terimakasih.
+
+
+- Generate Pesan Konfirmasi Pemeriksaan dengan Penjamin Pribadi
+
+Selamat PagiSiang/Sore/Malam
+Salam Sehat.
+
+Kami dari bagian kasir rawat inap RS EMC Pekayon.
+Konfirmasi untuk pasien *Nama Pasien Di Isi Manual Oleh User* dari dokter disarankan pemeriksaan :
+
+(Daftar Pemeriksaan dan Estimasi di isi manual oleh user secara custom)
+
+
+Apakah dari pihak keluarga bersedia untuk acc pribadi untuk dilakukan ?
+
+Terimakasih.
+
+- Generate Pesan Konfirmasi Obat dan Pemeriksaan dengan Penjamin Pribadi
+
+Selamat Pagi/Siang/Sore/Malam
+Salam Sehat.
+
+Kami dari bagian kasir rawat inap RS EMC Pekayon.
+Konfirmasi untuk pasien *Nama Pasien Di Isi Manual Oleh User* dari dokter disarankan pemeriksaan dan diresepkan obat :
+
+Daftar Obat dan Estimasi di isi manual oleh user secara custom
+
+Apakah dari pihak keluarga bersedia untuk acc pribadi untuk dilakukan/diberikan?
+
+Terimakasih.
+- Generate Pesan Konfirmasi Obat dengan Penjamin Asuransi karena tidak dijamin
+
+Selamat Pagi/Siang/Sore/Malam
+Salam Sehat.
+
+Kami dari bagian kasir rawat inap RS EMC Pekayon.
+Konfirmasi untuk pasien *Nama Pasien Di Isi Manual Oleh User* dari dokter diresepkan obat :
+
+Daftar Obat dan Estimasi di isi manual oleh user secara custom
+
+Karena dari asuransi, obat tersebut tidak dijaminkan.
+
+Apakah dari pihak keluarga bersedia untuk acc pribadi untuk diberikan?
+
+Terimakasih.
+
+- Generate Pesan Konfirmasi Obat dengan Penjamin Asuransi karena Overlimit
+
+Selamat Pagi/Siang/Sore/Malam
+Salam Sehat.
+
+Kami dari bagian kasir rawat inap RS EMC Pekayon.
+Konfirmasi untuk pasien *Nama Pasien Di Isi Manual Oleh User* dari dokter diresepkan obat :
+
+Daftar Obat dan Estimasi di isi manual oleh user secara custom
+
+Dikarenakan manfaat asuransi peserta telah mencapai batas limit yang ditentukan, tindakan/obat tersebut kemungkinan masih dapat diproses melalui asuransi, namun berpotensi menimbulkan selisih/ekses yang perlu dibayarkan secara pribadi oleh peserta.
+
+Apakah dari pihak keluarga bersedia untuk acc pribadi untuk diberikan?
+
+Terimakasih.
+
+- Generate Pesan Konfirmasi Pemeriksaan dengan Penjamin Asuransi karena tidak dijamin
+
+Selamat Pagi/Siang/Sore/Malam
+Salam Sehat.
+
+Kami dari bagian kasir rawat inap RS EMC Pekayon.
+Konfirmasi untuk pasien *Nama Pasien Di Isi Manual Oleh User* dari dokter disarankan untuk pemeriksaan :
+
+(Daftar pemeriksaan dan Estimasi di isi manual oleh user secara custom)
+
+Karena dari asuransi, tindakan/pemeriksaan tersebut tidak dijaminkan.
+
+Apakah dari pihak keluarga bersedia untuk acc pribadi untuk dilakukan ?
+
+Terimakasih.
+
+
+- Generate Pesan Selisih Jaminan Akhir Asuransi
+
+Selamat Pagi/Siang/Sore/Malam
+Salam Sehat.
+
+Kami dari bagian kasir rawat inap RS EMC Pekayon.
+Menginfokan terkait jaminan akhir asuransi pasien *Nama Pasien Di Isi Manual Oleh User* telah terbit.
+Biaya yang kami ajukan ke asuransi adalah (Nominal Billing di isi manual oleh user otomatis dalam format rupiah nantinya) dan yang dijaminkan asuransi (Nominal Jaminan Akhir Asuransi di isi maunal oleh user otomatis dalam format rupiah nantinya)
+Terdapat selisih (Perhitungan otomatis dari Nominal Billing – Nominal Jaminan Akhir jumlahnya akan otomatis dalam format rupiah nantinya) yang harus dibayarkan oleh peserta. Rincian/jaminan akhir kami lampirkan.
+
+Pembayarannya dapat melalui transfer ke no rekening:
+BCA 6042 87 9998
+BNI 0717 40 1635
+a/n PT Kurnia Sejahtera Utama
+
+Terimakasih.

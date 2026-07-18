@@ -1,0 +1,689 @@
+Buat aplikasi web offline bernama "EMC Admission Operan".
+Tujuan aplikasi adalah membantu petugas Admission melakukan operan antar shift, mencatat pending konfirmasi, dan memonitor status penyelesaian pending pasien rawat inap.
+Teknologi yang digunakan:
+* HTML
+* Tailwind CSS
+* Javascript ES6
+* IndexedDB sebagai database offline
+* LocalStorage untuk konfigurasi
+* Tanpa framework backend
+* PWA (Progressive Web App)
+* Responsive desktop
+* Semua fitur berjalan tanpa internet.
+Tema aplikasi menggunakan warna hijau modern seperti EMC.
+Buat struktur project yang rapi.
+Menu sidebar terdiri dari:
+Dashboard
+Pasien Rawat Inap
+Pending Operan
+Riwayat
+Import Pasien
+Laporan
+Pengaturan
+
+LOGIN
+Buat sistem login.
+Role:
+Superuser
+Officer
+Password disimpan menggunakan hash.
+Session login otomatis.
+Logout.
+Auto timeout.
+
+MASTER USER
+Superuser dapat:
+Tambah user
+Edit user
+Reset password
+Nonaktifkan user
+Mengatur logo rumah sakit
+Mengatur nama rumah sakit
+Mengatur folder sinkronisasi
+
+IMPORT PASIEN
+User dapat mengupload file Excel pasien rawat inap dari TrakCare.
+Struktur mengikuti file upload yang saya berikan.
+Primary Key utama adalah:
+No RM
+Bukan Episode.
+Import harus:
+Jika No RM baru
+→ buat pasien baru.
+Jika No RM sudah ada
+→ update data pasien.
+Jika No RM tidak ada pada file terbaru
+maka:
+Jika tidak memiliki pending
+→ pindahkan ke Riwayat Pasien.
+Jika masih memiliki pending
+→ pasien tetap aktif sampai semua pending selesai.
+Import harus sangat cepat meskipun ribuan data.
+Gunakan progress bar.
+Buat validasi data.
+Buat log import.
+Buat statistik hasil import.
+Semua data tersimpan di IndexedDB. Lanjutkan aplikasi EMC Admission Operan.
+Buat modul Pending Operan.
+Setiap pasien memiliki card.
+Informasi card:
+No RM
+Nama Pasien
+Ruangan
+Kelas
+Dokter
+Penjamin
+Tanggal Masuk
+Status Pending
+Jumlah Pending
+Shift Terakhir
+Petugas Terakhir
+
+PETUGAS DAPAT MENAMBAHKAN PENDING
+Kategori:
+Konfirmasi Billing
+Konfirmasi DPJP
+Konfirmasi Ruangan
+Konfirmasi Penjamin
+Konfirmasi Tindakan
+Administrasi
+Lainnya
+Setiap pending mempunyai:
+ID
+Tanggal
+Jam
+Shift
+User
+Isi Pending
+Prioritas
+Normal
+Urgent
+Critical
+Status
+Pending
+Diproses
+Selesai
+Deadline
+Lampiran Foto (opsional)
+Komentar
+
+WORKFLOW
+Pending baru
+↓
+Diproses
+↓
+Selesai
+Saat selesai wajib mengisi komentar penyelesaian.
+Tidak boleh langsung dihapus.
+Semua aktivitas masuk audit log.
+
+OPERAN SHIFT
+Saat pergantian shift:
+User lama wajib melakukan operan.
+User baru wajib login.
+Sebelum login selesai, aplikasi harus menampilkan seluruh pending dari operan sebelumnya.
+User baru wajib memilih:
+Sudah selesai
+atau
+Masih berlanjut
+Pending tidak boleh hilang sebelum benar-benar selesai.
+Semua histori operan disimpan permanen. Lanjutkan aplikasi EMC Admission Operan.
+Buat sistem sinkronisasi offline.
+Semua komputer menggunakan folder bersama (Shared Folder).
+Superuser menentukan lokasi folder.
+Setiap data operan disimpan sebagai file per pasien.
+Nama file menggunakan:
+NoRM.json
+atau format lain yang ringan.
+Saat sinkronisasi:
+Aplikasi membaca seluruh file.
+Jika ada perubahan terbaru
+otomatis update.
+Jika konflik data
+gunakan data dengan waktu edit terbaru.
+Tidak boleh terjadi duplikasi.
+
+DASHBOARD
+Tampilkan:
+Jumlah pasien aktif
+Jumlah pending
+Pending selesai hari ini
+Pending belum selesai
+Pending Critical
+Operan Hari Ini
+Grafik pending
+Grafik operan
+Grafik penyelesaian
+
+RIWAYAT
+Cari berdasarkan:
+No RM
+Nama
+Ruangan
+Tanggal
+Shift
+Petugas
+Status
+Riwayat tidak boleh dapat diedit.
+
+LAPORAN
+Export PDF
+Portrait A4
+Logo rumah sakit
+Tanggal
+Jam
+Petugas
+Footer:
+EMC Admission Operan
+Copyright Dedi Supriadi
+Filter:
+Tanggal
+Shift
+Ruangan
+Petugas
+Status
+Export Excel juga tersedia.
+Sempurnakan aplikasi EMC Admission Operan.
+Fokus pada kualitas aplikasi.
+
+KEAMANAN
+Password hash.
+Role Based Access.
+Audit Log.
+Auto Logout.
+Backup database.
+Restore database.
+Validasi seluruh input.
+Proteksi data rusak.
+
+PERFORMA
+Virtual Table.
+Lazy Loading.
+Pagination.
+Debounce Search.
+Import ribuan pasien harus tetap cepat.
+Optimalkan IndexedDB.
+
+UX
+Modern Dashboard.
+Sidebar dapat hide/show.
+Dark Mode.
+Light Mode.
+Toast Notification.
+Loading Animation.
+Modal Confirmation.
+Keyboard Shortcut.
+Responsive.
+
+PENCARIAN
+Cari pasien berdasarkan:
+No RM
+Nama
+Ruangan
+Dokter
+Penjamin
+Status Pending
+Shift
+Tanggal
+Semua pencarian realtime.
+
+FITUR TAMBAHAN
+Bookmark pasien penting.
+Favorit.
+Reminder pending mendekati deadline.
+Filter prioritas.
+Export seluruh histori.
+Statistik performa petugas.
+Log aktivitas lengkap.
+Monitoring seluruh pending aktif.
+Notifikasi jika masih ada pending saat operan.
+Validasi agar pasien dengan pending tidak dapat dipindahkan ke riwayat sampai seluruh pending selesai.
+Kode dibuat modular, mudah dikembangkan, terdokumentasi dengan baik, dan siap ditambahkan fitur baru di masa depan tanpa mengubah struktur utama aplikasi.
+Buat berdasarkan struktur file excel yang saya berikan
+
+1. VALIDASI OPERAN SHIFT
+
+- Setiap pergantian shift WAJIB dilakukan proses operan.
+
+- User yang menyerahkan operan harus menekan tombol "Mulai Operan".
+
+- Sebelum operan selesai, user penerima WAJIB memasukkan Username dan Password yang terdaftar.
+
+- Sistem melakukan autentikasi terlebih dahulu.
+
+- Jika username atau password salah maka operan tidak dapat diselesaikan.
+
+- Setelah login berhasil, sistem mencatat:
+
+  - Tanggal dan jam operan.
+
+  - Shift sebelumnya.
+
+  - Shift penerima.
+
+  - Nama user penyerah.
+
+  - Nama user penerima.
+
+- Semua data disimpan pada riwayat operan.
+
+2. REPORT PDF OTOMATIS
+
+Setelah operan berhasil diselesaikan, sistem otomatis membuat file PDF ukuran A4 Portrait yang berisi:
+
+Header
+
+- Logo Rumah Sakit.
+
+- Nama Rumah Sakit.
+
+- EMC Admission Operan.
+
+- Tanggal.
+
+- Shift.
+
+Informasi Operan
+
+- User Penyerah.
+
+- User Penerima.
+
+- Jam Operan.
+
+- ringkasan pending operan meliputi no episode, nama pasien, penjamin dan keterangan pendingnya apa
+- Ringkasan just info
+
+- Total Pasien Rawat Inap.
+
+- Total Pending.
+
+- Total Pending Selesai.
+
+- Total Pending Berlanjut.
+
+Footer
+
+----------------------------------------------------
+
+Dicetak otomatis oleh EMC Admission Operan
+
+Tanggal dan Jam Cetak
+
+Copyright © Dedi Supriadi | EMC Pekayon
+
+----------------------------------------------------
+
+PDF dapat langsung diunduh dan dicetak.
+
+3. PENAMBAHAN KOLOM JUST INFO
+
+Tambahkan field baru bernama "Just Info".
+
+Fungsi:
+
+- Berisi informasi tambahan yang tidak memerlukan tindak lanjut.
+
+- Tidak dihitung sebagai pending.
+
+- Ikut tampil pada Card Pasien.
+
+- Ikut tampil pada Dashboard.
+
+- Ikut tampil pada Riwayat Operan.
+
+- Ikut tampil pada PDF Operan.
+
+- Tetap tersimpan walaupun pasien berpindah shift.
+
+4. EXPORT HTML OFFLINE
+
+Buat aplikasi menjadi satu file HTML yang dapat dijalankan tanpa instalasi.
+
+Persyaratan:
+
+- Single file index.html.
+
+- CSS dan JavaScript berada di dalam file HTML (inline).
+
+- Tidak menggunakan server.
+
+- Tidak membutuhkan Node.js.
+
+- Tidak membutuhkan internet.
+
+- Tidak membutuhkan database online.
+
+- Semua data menggunakan IndexedDB dan LocalStorage.
+
+- PDF dibuat secara offline menggunakan library yang disisipkan ke dalam HTML.
+
+- Dapat dibuka cukup dengan double click pada file index.html di komputer Windows.
+
+5. HASIL AKHIR
+
+Output yang harus dihasilkan AI adalah:
+
+- index.html (single file)
+
+- Siap dijalankan secara offline.
+
+- Semua fitur tetap berfungsi tanpa koneksi internet.
+
+- Tidak ada file pendukung lain selain index.html.
+
+1. Pencarian Pasien
+
+Saat ini pencarian hanya dapat dilakukan menggunakan No. RM.
+
+Ubah menjadi pencarian universal (global search) yang dapat mencari berdasarkan:
+
+* No. RM
+* Nama Pasien
+* Kombinasi sebagian nama (partial search)
+* Tidak membedakan huruf besar dan kecil (case insensitive)
+
+Contoh:
+
+Input:
+
+* 123456 → menemukan pasien No. RM 123456
+* Budi → menemukan seluruh pasien yang memiliki nama “Budi”
+* bud → tetap menemukan “Budi Santoso”
+* Siti → menemukan semua pasien bernama Siti
+
+Ketentuan:
+
+* Search berjalan secara realtime ketika user mengetik.
+* Tidak perlu menekan tombol Enter.
+* Jika hasil lebih dari satu maka tampilkan seluruh hasil.
+* Jika tidak ada data tampilkan pesan:
+    “Data pasien tidak ditemukan.”
+
+Search harus bekerja pada:
+
+* Dashboard pasien aktif
+* Menu operan
+* Riwayat pasien
+* Pending Operan
+
+Gunakan pencarian yang cepat dan efisien walaupun jumlah pasien mencapai ribuan.
+
+⸻
+
+2. Perbaikan Pembuatan Operan
+
+Saat ini user harus masuk ke menu operan terlebih dahulu.
+
+Ubah alur menjadi lebih sederhana.
+
+Tambahkan tombol pada setiap Card Pasien:
+
+📋 Buat Operan
+
+Ketika tombol diklik maka langsung membuka Form Operan untuk pasien tersebut.
+
+Form otomatis mengisi:
+
+* No. RM
+* Nama Pasien
+* Ruangan
+* Kelas
+* Dokter
+* Penjamin
+* Tanggal
+* Shift
+* User pembuat
+
+User hanya perlu mengisi:
+
+* Judul operan
+* Detail operan
+* Prioritas
+* Status
+* Checklist yang diperlukan
+
+Setelah disimpan:
+
+* Operan langsung muncul pada Card Pasien.
+* Card menampilkan badge jumlah pending operan.
+* Dashboard langsung ter-update tanpa perlu refresh.
+
+Contoh tampilan card:
+
+Nama Pasien
+
+No RM
+
+Ruangan
+
+Dokter
+
+Pending Operan (3)
+
+[Tambah Operan]
+
+[Detail]
+
+⸻
+
+3. Badge Pending Operan
+
+Pada setiap Card Pasien tampilkan indikator:
+
+* Hijau = Tidak ada operan
+* Kuning = Ada operan prioritas normal
+* Merah = Ada operan prioritas tinggi
+
+Jumlah pending harus selalu sinkron dengan data operan.
+
+⸻
+
+4. Detail Operan pada Card
+
+Saat Card Pasien diklik tampilkan panel yang berisi seluruh operan pasien tersebut.
+
+Setiap operan menampilkan:
+
+* Waktu dibuat
+* Shift
+* User pembuat
+* Prioritas
+* Status
+* Isi operan
+
+Tersedia tombol:
+
+* Edit
+* Tandai selesai
+* Tambah operan baru
+* Lihat riwayat operan
+
+Tidak perlu membuka halaman lain.
+
+⸻
+
+5. UX yang Lebih Cepat
+
+Optimalkan alur kerja agar petugas Admission cukup:
+
+1. Cari pasien dengan No. RM atau Nama.
+2. Klik Card Pasien.
+3. Klik “Tambah Operan”.
+4. Isi form.
+5. Simpan.
+
+Target maksimal proses kurang dari 10 detik.
+
+Gunakan modal atau side panel agar perpindahan halaman diminimalkan.
+
+⸻
+
+6. Ketentuan Teknis
+
+* Jangan mengubah struktur database yang sudah ada.
+* Jangan mengubah mekanisme sinkronisasi.
+* Jangan mengubah fitur upload pasien.
+* Tetap menggunakan No. RM sebagai primary key.
+* Semua fitur baru harus kompatibel dengan data lama.
+* Pastikan performa tetap cepat meskipun data pasien dan operan bertambah banyak
+
+1. Riwayat Pasien Pulang Berdasarkan No. IPK
+
+Saat pasien sudah tidak terdapat pada file import rawat inap terbaru, aplikasi menganggap pasien telah pulang.
+
+Namun sebelum dipindahkan ke Riwayat, lakukan proses berikut:
+
+* Simpan seluruh data operan pasien.
+* Simpan seluruh pending.
+* Simpan seluruh log penyelesaian.
+* Simpan seluruh komentar.
+* Simpan seluruh aktivitas operan.
+
+Semua data tersebut harus diarsipkan berdasarkan:
+
+* No. RM
+* No. IPK (Episode Rawat Inap)
+
+Bukan hanya berdasarkan No. RM.
+
+2. Struktur Riwayat
+
+Satu No. RM dapat memiliki banyak riwayat berdasarkan No. IPK.
+
+Contoh:
+
+No. RM 123456
+
+├── IPK 202600001
+│   ├── Operan Shift Pagi
+│   ├── Operan Shift Sore
+│   ├── Pending
+│   └── Riwayat Penyelesaian
+│
+├── IPK 202600245
+│   ├── Operan
+│   ├── Pending
+│   └── Riwayat
+│
+└── IPK 202600897
+└── Pasien Masih Dirawat
+
+Setiap episode harus berdiri sendiri dan tidak boleh tercampur dengan episode lainnya.
+
+3. Pasien Masuk Kembali
+
+Jika pasien dengan No. RM yang sama masuk kembali tetapi memperoleh No. IPK baru:
+
+* Jangan menampilkan operan lama.
+* Jangan mengembalikan pending lama.
+* Buat episode rawat inap baru.
+* Riwayat sebelumnya tetap dapat dilihat melalui menu Riwayat Pasien.
+
+4. Menu Riwayat Pasien
+
+Pada halaman Riwayat tampilkan:
+
+* No. RM
+* Nama Pasien
+* No. IPK
+* Tanggal Masuk
+* Tanggal Pulang
+* Total Operan
+* Total Pending
+* Status Penyelesaian
+* Tombol Lihat Detail
+
+Saat Detail dibuka tampilkan seluruh histori operan pada episode tersebut secara kronologis.
+
+5. Sinkronisasi
+
+Saat import file pasien terbaru:
+
+* Jika No. RM dan No. IPK masih sama → pasien tetap aktif.
+* Jika No. RM sama tetapi No. IPK berbeda → buat episode baru.
+* Jika No. RM tidak ditemukan lagi pada file import → pindahkan episode aktif ke Riwayat setelah memastikan seluruh proses operan sesuai aturan aplikasi.
+
+6. Footer Aplikasi
+
+Tambahkan footer yang tampil konsisten pada seluruh halaman aplikasi.
+
+Footer berisi:
+
+Kiri:
+EMC Admission Operan
+
+Tengah:
+Version 1.0.0
+
+Kanan:
+Developed by Dedi Supriadi | RS EMC Pekayon
+
+Footer harus:
+
+* Responsive.
+* Selalu berada di bagian bawah halaman.
+* Mengikuti tema aplikasi (light/dark mode).
+* Tidak mengganggu area kerja pengguna.
+* Tetap tampil pada Dashboard, Operan, Riwayat, Pengaturan, dan seluruh menu lainnya.
+
+Fitur Backup & Restore Menggunakan File Excel
+
+Buat sistem Backup dan Restore aplikasi yang menggunakan 1 file Excel (.xlsx) sebagai media penyimpanan seluruh data aplikasi.
+
+Backup
+
+Saat pengguna memilih menu Backup Data, aplikasi harus membuat satu file Excel yang berisi seluruh data aplikasi dalam beberapa worksheet, antara lain:
+
+* Pengguna (Username, Nama, Role, Password yang sudah di-hash, Status Aktif).
+* Pengaturan Aplikasi.
+* Logo Rumah Sakit (disimpan dalam format Base64 atau sheet khusus).
+* Informasi Rumah Sakit.
+* Data Pasien Aktif.
+* Data Pasien Pulang.
+* Data Pending Operan.
+* Data Just Info.
+* Riwayat Operan.
+* Riwayat Pending.
+* Riwayat Just Info.
+* Log Aktivitas.
+* Master Referensi bila ada.
+* Seluruh data lain yang tersimpan pada aplikasi.
+
+Setiap worksheet harus memiliki nama yang jelas dan struktur kolom yang konsisten agar dapat dipulihkan kembali tanpa kehilangan data.
+
+Tambahkan worksheet AppInfo yang berisi:
+
+* Nama aplikasi.
+* Versi aplikasi.
+* Versi struktur database.
+* Tanggal Backup.
+* Nama Rumah Sakit.
+* Jumlah record setiap worksheet.
+* Checksum/Signature untuk validasi file backup.
+
+Restore
+
+Buat menu Restore Data yang hanya menerima file Excel hasil backup aplikasi.
+
+Saat restore dilakukan:
+
+1. Validasi bahwa file berasal dari aplikasi EMC Admission Operan.
+2. Validasi versi backup.
+3. Tampilkan ringkasan jumlah data yang akan dipulihkan.
+4. Berikan konfirmasi sebelum proses restore.
+5. Restore seluruh data termasuk user, pengaturan, logo, pasien, pending, just info, riwayat, dan seluruh konfigurasi aplikasi.
+6. Setelah restore selesai, aplikasi otomatis memuat ulang seluruh data sehingga kondisinya sama persis seperti saat backup dibuat.
+
+Ketentuan
+
+* File backup wajib berformat .xlsx.
+* Tidak menggunakan database eksternal.
+* Backup dapat dipindahkan ke komputer lain.
+* Restore menghasilkan aplikasi dengan kondisi 100% sama seperti komputer asal.
+* Mendukung backup dan restore secara offline tanpa koneksi internet.
+* Backup harus kompatibel dengan versi aplikasi yang sama atau versi yang lebih baru yang masih mendukung migrasi data.
+* Jika ditemukan perbedaan versi struktur data, aplikasi harus menjalankan proses migrasi otomatis tanpa menghilangkan data pengguna.
+
+* Backup Otomatis: setiap selesai operan shift atau saat aplikasi ditutup, sistem otomatis membuat file backup Excel dengan nama seperti EMC_Operan_Backup_2026-07-16_0700.xlsx. Dengan begitu, jika komputer rusak atau data hilang, cukup lakukan Restore menggunakan file Excel terakhir.
+

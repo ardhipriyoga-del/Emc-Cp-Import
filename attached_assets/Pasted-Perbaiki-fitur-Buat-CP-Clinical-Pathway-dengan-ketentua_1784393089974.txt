@@ -1,0 +1,183 @@
+Perbaiki fitur "Buat CP (Clinical Pathway)" dengan ketentuan berikut.
+
+## 1. Mapping Kelas Kamar dengan Master Tarif
+
+Saat ini terdapat perbedaan nama kelas kamar antara form CP dan Master Tarif.
+
+### Pada form CP
+
+Pilihan:
+
+- Kelas III
+
+- Kelas II
+
+- Kelas I
+
+- VIP
+
+- Suite
+
+### Pada Master Tarif
+
+Kolom Class berisi:
+
+- III
+
+- II
+
+- I
+
+- Premium
+
+- VIP
+
+- Suite
+
+(dan kemungkinan akan bertambah di kemudian hari)
+
+Buat mapping otomatis seperti berikut:
+
+- Kelas III → III
+
+- Kelas II → II
+
+- Kelas I → I
+
+- VIP → VIP
+
+- Suite → Suite
+
+Apabila di master terdapat "Premium", gunakan untuk kelas yang sesuai berdasarkan mapping yang dapat dikembangkan (jangan hardcode di banyak tempat). Simpan mapping dalam satu konfigurasi agar mudah diubah di masa depan.
+
+Semua pencarian tarif harus menggunakan hasil mapping tersebut, bukan nama yang tampil pada dropdown.
+
+---
+
+## 2. Perbaiki Auto Tarif Kamar/Hari
+
+Saat ini tarif kamar per hari masih sering salah atau tidak muncul.
+
+Perbaiki dengan alur berikut:
+
+- Setelah user memilih kelas kamar
+
+- Aplikasi mencari item kategori "Akomodasi" atau "Kamar Perawatan" pada Master Tarif.
+
+- Filter berdasarkan Class hasil mapping.
+
+- Jika hanya ada satu tarif:
+
+  - pilih otomatis.
+
+- Jika ada beberapa tarif:
+
+  - tampilkan pilihan kepada user.
+
+- Harga otomatis mengambil tarif dari Master Tarif.
+
+- Qty default = Lama Rawat.
+
+- Qty tetap dapat diedit manual.
+
+- Harga selalu mengikuti Master Tarif dan tidak boleh diinput manual.
+
+Apabila tarif tidak ditemukan, tampilkan pesan:
+
+"Tarif kamar untuk kelas ini belum tersedia pada Master Tarif."
+
+Jangan sampai aplikasi error.
+
+---
+
+## 3. Tambahkan Visit Dokter Spesialis
+
+Pada menu Buat CP tambahkan kategori baru:
+
+Visit Dokter Spesialis
+
+Format:
+
+Nama Spesialis
+
+(input text)
+
+Contoh yang bisa diisi user:
+
+- Penyakit Dalam
+
+- Bedah
+
+- Anak
+
+- Saraf
+
+- Jantung
+
+- Mata
+
+- THT
+
+- Obgyn
+
+- Orthopedi
+
+- Paru
+
+- Rehab Medik
+
+- Anestesi
+
+- dll
+
+Kolom ini bersifat bebas (free text), tidak perlu master khusus.
+
+Di bawahnya tampilkan:
+
+Nama Item
+
+→ memilih dari Master Tarif yang termasuk kategori Visit Dokter.
+
+Setelah item dipilih:
+
+- tarif otomatis dari Master Tarif
+
+- qty default = lama rawat
+
+- qty dapat diedit
+
+- subtotal otomatis dihitung
+
+Output CP juga harus menampilkan:
+
+Visit Dokter Spesialis
+
+- Penyakit Dalam
+
+- Bedah
+
+- Saraf
+
+sesuai yang diinput user.
+
+---
+
+## 4. Validasi
+
+Pastikan seluruh proses pembuatan CP menggunakan urutan:
+
+1. User memilih kelas kamar.
+
+2. Sistem melakukan mapping kelas.
+
+3. Sistem memfilter Master Tarif berdasarkan mapping tersebut.
+
+4. User hanya memilih nama item.
+
+5. Harga otomatis mengikuti Master Tarif.
+
+6. Qty default sesuai aturan tetapi tetap dapat diedit.
+
+7. Total dihitung otomatis.
+
+Jangan mengubah struktur database maupun format Master Tarif yang sudah ada. Fokus hanya memperbaiki logika pencarian tarif, mapping kelas, tarif kamar otomatis, dan menambahkan fitur Visit Dokter Spesialis.

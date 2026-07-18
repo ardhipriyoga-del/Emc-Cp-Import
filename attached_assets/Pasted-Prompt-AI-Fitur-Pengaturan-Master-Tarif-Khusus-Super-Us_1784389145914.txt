@@ -1,0 +1,169 @@
+Prompt AI – Fitur Pengaturan Master Tarif (Khusus Super User)
+
+Buat fitur baru pada aplikasi EMC Admission Operan yaitu Pengaturan → Master Tarif.
+
+Hak Akses
+
+Menu ini hanya dapat diakses oleh Super User.
+
+User biasa hanya dapat menggunakan Master Tarif yang sedang aktif dan tidak dapat mengubah data.
+
+⸻
+
+Fungsi
+
+Master Tarif menjadi database referensi utama untuk seluruh aplikasi, tidak hanya Billing Checker.
+
+Ke depannya Master Tarif digunakan untuk:
+
+* Billing Checker
+* Validasi tarif tindakan
+* Monitoring BPJS
+* Perhitungan jasa dokter
+* Perhitungan selisih tarif
+* Modul pengembangan lainnya
+
+Semua modul harus mengambil referensi dari Master Tarif yang sedang aktif.
+
+⸻
+
+Struktur Import Excel
+
+Import harus mengikuti struktur file Excel berikut.
+
+Kolom Excel	Fungsi
+Hospitals	Nama Rumah Sakit
+Jenistarif	Jenis Tarif
+From Date Tarif	Tanggal Berlaku Tarif
+ITP RowId	ID Tarif
+Order Item	Nama Tarif / Nama Tindakan
+Order Item Code	Kode Tarif
+Kelastarif	Kelas Tarif
+Price	Harga
+
+Contoh:
+
+* Hospitals = RS EMC Pekayon
+* Jenistarif = Inhealth
+* From Date Tarif = 01-Jan-24
+* ITP RowId = 35016885||1||92
+* Order Item = Jasa Dokter Operator Bedah Mulut-Gol. III A
+* Order Item Code = 11040707
+* Kelastarif = Rawat Jalan/IGD
+* Price = 5620800
+
+Import harus mempertahankan seluruh data tanpa mengubah format nilai.
+
+⸻
+
+Penyimpanan
+
+Saat Super User mengimpor file Excel:
+
+* Simpan seluruh isi file ke database lokal aplikasi.
+* Satu file import dianggap sebagai satu Master Tarif.
+* Jangan menggabungkan dengan Master Tarif lain.
+* Simpan versi Master Tarif agar dapat digunakan kembali.
+
+Informasi yang disimpan:
+
+* Nama Master Tarif
+* Rumah Sakit
+* Jenis Tarif
+* Tanggal Berlaku
+* Tanggal Import
+* Jumlah Item Tarif
+* Status Aktif / Nonaktif
+* User yang melakukan import
+
+⸻
+
+Fitur Menu Master Tarif
+
+Halaman Master Tarif harus memiliki:
+
+* Daftar seluruh Master Tarif.
+* Tombol Import Excel.
+* Tombol Export Excel.
+* Tombol Edit informasi Master Tarif.
+* Tombol Hapus Master Tarif.
+* Tombol Jadikan Aktif.
+* Pencarian.
+* Filter berdasarkan Rumah Sakit.
+* Filter berdasarkan Jenis Tarif.
+* Filter berdasarkan Tanggal Berlaku.
+
+⸻
+
+Validasi Import
+
+Saat file dipilih:
+
+1. Baca seluruh isi Excel.
+2. Pastikan seluruh kolom wajib tersedia.
+3. Jika ada kolom yang hilang tampilkan pesan error.
+4. Tampilkan preview data.
+5. Tampilkan jumlah item tarif.
+6. Tampilkan jumlah kode tarif unik.
+7. Tampilkan jumlah kelas tarif.
+
+Import hanya dapat dilakukan setelah validasi berhasil.
+
+⸻
+
+Master Tarif Aktif
+
+Hanya boleh ada 1 Master Tarif Aktif.
+
+Ketika Super User mengaktifkan Master Tarif baru:
+
+* Master Tarif sebelumnya otomatis menjadi Nonaktif.
+* Seluruh modul aplikasi langsung menggunakan Master Tarif yang baru.
+* Tidak perlu mengubah kode aplikasi.
+
+⸻
+
+Detail Data
+
+Saat salah satu Master Tarif dipilih, tampilkan tabel:
+
+* Hospitals
+* Jenistarif
+* From Date Tarif
+* Order Item Code
+* Order Item
+* Kelastarif
+* Price
+
+Lengkapi dengan:
+
+* Sorting.
+* Pencarian cepat.
+* Filter.
+* Pagination.
+* Export Excel.
+
+⸻
+
+Riwayat
+
+Catat seluruh aktivitas:
+
+* Import Master Tarif
+* Edit
+* Hapus
+* Aktivasi
+* Nonaktifkan
+
+Lengkapi dengan:
+
+* Username
+* Tanggal
+* Jam
+* Aktivitas
+
+⸻
+
+Tujuan
+
+Master Tarif harus menjadi pusat referensi tarif seluruh aplikasi EMC Admission Operan sehingga setiap fitur baru cukup mengambil data dari Master Tarif aktif tanpa perlu melakukan perubahan struktur aplikasi.

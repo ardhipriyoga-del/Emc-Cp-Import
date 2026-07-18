@@ -1,0 +1,118 @@
+Perbaikan Fitur Buat CP
+
+Lakukan perbaikan pada menu Buat CP dengan ketentuan berikut.
+
+1. Filter Item Berdasarkan Kelas Kamar
+
+Saat user memilih Kelas Kamar Perawatan (III, II, I, VIP, Suite), aplikasi harus otomatis memfilter daftar item tarif sesuai kelas tersebut.
+
+Contoh:
+
+* Jika memilih Kelas III, hanya tampil item yang memiliki tarif Kelas III.
+* Jika memilih VIP, hanya tampil item tarif VIP.
+* Jangan menampilkan tarif dari kelas lain.
+
+Filter dilakukan menggunakan data pada Master Tarif yang sudah diupload.
+
+⸻
+
+2. Perbaiki Input Qty
+
+Saat ini Qty default = 1, tetapi angka 1 tidak bisa dihapus.
+
+Perbaiki agar:
+
+* Default tetap 1.
+* User dapat menghapus isi textbox menggunakan Backspace/Delete.
+* User dapat langsung mengetik angka baru, misalnya 3, 5, atau 10 tanpa hambatan.
+* Input hanya menerima angka positif.
+* Jika field kosong saat kehilangan fokus (blur), otomatis kembali menjadi 1.
+* Jangan memaksa angka 1 muncul ketika user sedang mengedit.
+
+⸻
+
+3. Harga Otomatis
+
+Saat user memilih nama item:
+
+* Harga otomatis diambil dari Master Tarif sesuai kelas kamar yang dipilih.
+* User tidak perlu memilih harga lagi.
+* Jika kelas kamar berubah, seluruh harga item harus otomatis menyesuaikan dengan kelas yang baru.
+
+⸻
+
+4. Output Harus Sama Dengan Template Excel
+
+Hasil export CP harus mengikuti template Excel yang saya upload.
+
+Ketentuannya:
+
+* Urutan kolom sama persis.
+* Nama kolom sama persis.
+* Format tabel sama.
+* Pengelompokan kategori dan subkategori sama.
+* Tidak boleh menambah kolom baru yang tidak ada pada template.
+* Tidak boleh mengubah layout.
+* Lebar kolom menyesuaikan template.
+* Border, merge cell, alignment, dan format angka mengikuti template.
+* Nama sheet mengikuti template.
+* Jika ada rumus atau format tertentu pada template, pertahankan.
+
+Tujuannya agar hasil export terlihat identik dengan file Excel referensi.
+
+⸻
+
+5. Struktur Kategori
+
+Item harus memiliki struktur:
+
+Kategori
+→ Sub Kategori
+→ Item Tarif
+
+Contoh:
+
+Laboratorium
+
+* Hematologi
+    * Hema 1
+    * Hema 2
+
+Radiologi
+
+* CT Scan
+    * CT Head
+    * CT Thorax
+
+Operasi
+
+* BHP
+    * Benang
+    * Kassa
+
+User dapat memilih kategori dan subkategori sehingga daftar item menjadi lebih ringkas.
+
+⸻
+
+6. Qty dan Lama Rawat
+
+Default:
+
+* Qty = 1
+* Lama Rawat = 1 hari
+
+Namun keduanya harus dapat diedit bebas oleh user.
+
+⸻
+
+7. Validasi
+
+Pastikan:
+
+* Tidak ada error ketika mengganti kelas kamar.
+* Tidak ada duplicate item.
+* Harga selalu berasal dari Master Tarif.
+* Export Excel tetap berhasil walaupun Qty diubah.
+* Perubahan Qty langsung menghitung ulang subtotal.
+
+Lakukan refactoring bila diperlukan agar proses filter kelas kamar, pemilihan item, dan export Excel menjadi lebih stabil dan mudah dikembangkan.

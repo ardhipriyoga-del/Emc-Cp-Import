@@ -1,0 +1,326 @@
+Fitur CP Estimasi Biaya
+
+Tambahkan menu baru di dalam icard pasien bernama “Buat CP”.
+
+Tujuan
+
+Fitur ini digunakan untuk membuat estimasi biaya rawat inap berdasarkan diagnosis, kelas perawatan, lama rawat, dan item pelayanan yang diambil dari Master Tarif.
+
+⸻
+
+Sumber Data
+
+Gunakan data dari:
+
+* Data pasien yang sudah diinput.
+* Master Tarif yang sudah diupload pada menu Pengaturan.
+* Pengaturan kelas kamar.
+
+⸻
+
+Informasi Awal
+
+Saat user membuka menu Buat CP, isi otomatis:
+
+* No. RM
+* Nama Pasien
+* Episode
+* Tanggal Masuk
+* Dokter DPJP
+* Penjamin
+* Diagnosa Awal
+
+Diagnosa diambil otomatis dari data pasien tetapi boleh diedit.
+
+⸻
+
+Kelas Kamar
+
+Pilihan:
+
+* Kelas III
+* Kelas II
+* Kelas I
+* VIP
+* Suite
+
+Saat user memilih kelas kamar, aplikasi otomatis mencari tarif kamar pada Master Tarif sesuai kelas tersebut.
+
+Tarif masih dapat diedit apabila diperlukan.
+
+⸻
+
+Lama Rawat
+
+Field:
+
+Lama Rawat (hari)
+
+Default:
+
+1
+
+User dapat mengubah nilainya.
+
+Tarif kamar dihitung otomatis:
+
+Tarif kamar × Lama Rawat
+
+⸻
+
+Item Clinical Pathway
+
+Buat tabel dengan kolom:
+
+Kategori
+
+Sub Kategori
+
+Nama Item
+
+Qty
+
+Harga Satuan
+
+Subtotal
+
+Keterangan
+
+⸻
+
+Cara Menambah Item
+
+Saat klik tombol Tambah Item:
+
+Muncul popup pencarian.
+
+User cukup mengetik nama item.
+
+Contoh:
+
+HEMA 1
+
+CBC
+
+Thorax
+
+Infus
+
+Visit DPJP
+
+Administrasi
+
+dan lain-lain.
+
+Data diambil dari Master Tarif.
+
+Setelah dipilih:
+
+* Harga otomatis mengikuti Master Tarif.
+* Qty default = 1.
+* Qty dapat diedit.
+* Harga satuan dapat diedit.
+* Keterangan dapat diisi.
+
+Tidak perlu mengetik harga secara manual.
+
+⸻
+
+Kategori
+
+User dapat memilih kategori:
+
+* Kamar
+* Laboratorium
+* Radiologi
+* Farmasi
+* Alkes
+* BHP
+* Tindakan
+* Visit Dokter
+* Konsultasi
+* Administrasi
+* Rehab
+* Hemodialisa
+* Gizi
+* Penunjang
+* Lainnya
+
+Kategori boleh ditambah oleh Super User.
+
+⸻
+
+Sub Kategori
+
+Tambahkan kolom Sub Kategori.
+
+Contoh:
+
+Laboratorium
+
+* Hematologi
+* Kimia Klinik
+* Imunologi
+
+Radiologi
+
+* X-Ray
+* CT Scan
+* MRI
+
+Farmasi
+
+* Obat Oral
+* Obat Injeksi
+
+Sub kategori boleh diketik manual atau dipilih dari daftar.
+
+⸻
+
+Perhitungan
+
+Subtotal:
+
+Qty × Harga
+
+Total Kategori:
+
+Akumulasi seluruh item pada kategori tersebut.
+
+Grand Total:
+
+Total seluruh kategori.
+
+Semua nilai diperbarui secara realtime setiap ada perubahan.
+
+⸻
+
+Ringkasan
+
+Tampilkan:
+
+Estimasi Biaya
+
+Total Kamar
+
+Total Laboratorium
+
+Total Radiologi
+
+Total Farmasi
+
+Total Alkes
+
+Total BHP
+
+Total Visit
+
+Total Administrasi
+
+Grand Total
+
+⸻
+
+Simpan
+
+Tombol:
+
+* Simpan CP
+* Simpan Sebagai Template
+* Muat Template
+* Duplikasi CP
+* Hapus CP
+
+Semua data disimpan di database lokal aplikasi.
+
+Satu pasien dapat memiliki lebih dari satu CP.
+
+⸻
+
+Template CP
+
+Super User dapat membuat template.
+
+Contoh:
+
+* CP Dengue
+* CP Appendicitis
+* CP Sectio Caesarea
+* CP Pneumonia
+* CP Stroke
+* CP Typhoid
+
+Saat memilih template:
+
+Semua item otomatis masuk ke tabel.
+
+User masih dapat menghapus atau menambah item.
+
+⸻
+
+Export
+
+Tambahkan tombol:
+
+* Cetak PDF
+* Export Excel
+
+Isi laporan:
+
+Header:
+
+* Logo Rumah Sakit
+* Nama Pasien
+* No RM
+* Episode
+* Diagnosa
+* Penjamin
+* Kelas Perawatan
+* Lama Rawat
+
+Tabel seluruh item.
+
+Di bagian bawah tampilkan:
+
+Total Estimasi Biaya.
+
+⸻
+
+Hak Akses
+
+Petugas:
+
+* Membuat CP
+* Mengedit CP
+* Export
+
+Super User:
+
+* Mengelola Template
+* Mengelola Kategori
+* Mengelola Sub Kategori
+* Mengelola Master Tarif
+
+⸻
+
+Integrasi Master Tarif
+
+Harga seluruh item HARUS selalu mengambil data dari Master Tarif yang sudah diupload.
+
+User hanya memilih nama item.
+
+Harga muncul otomatis.
+
+Apabila harga pada Master Tarif berubah, CP baru menggunakan harga terbaru.
+
+CP yang sudah pernah disimpan tidak ikut berubah agar histori tetap konsisten.
+
+⸻
+
+User Experience
+
+* Pencarian item harus sangat cepat.
+* Mendukung ribuan data Master Tarif.
+* Gunakan autocomplete/search.
+* Tidak boleh ada input harga manual saat memilih item dari Master Tarif.
+* Tampilan modern, responsif, mudah digunakan, dan konsisten dengan tema EMC Admission Operan.
