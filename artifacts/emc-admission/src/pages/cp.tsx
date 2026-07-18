@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 import {
   Search, Plus, Trash2, Pencil, ChevronDown, ArrowLeft,
   FileText, Download, Save, Copy, FileSpreadsheet, Layers,
-  AlertCircle, Star, X, RefreshCw, ClipboardList, List
+  AlertCircle, Star, X, RefreshCw, ClipboardList, List, Users
 } from 'lucide-react';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -757,12 +757,38 @@ export default function CPPage() {
                   Tarif Kamar/Hari
                   {hasMasterTarif && <span className="ml-1 text-primary font-normal">(auto)</span>}
                 </label>
-                <Input
-                  type="number" min={0}
-                  value={tarifKamar}
-                  onChange={e => setTarifKamar(Number(e.target.value) || 0)}
-                  className="h-9 text-sm"
-                />
+                {hasMasterTarif ? (
+                  <div className="space-y-1">
+                    <div className="flex gap-1.5 items-center">
+                      <div className="h-9 flex-1 px-3 rounded-md border border-input bg-muted text-sm flex items-center font-medium text-muted-foreground">
+                        {tarifKamar > 0
+                          ? fmtRp(tarifKamar)
+                          : <span className="text-orange-500 text-xs font-normal">Belum tersedia</span>}
+                      </div>
+                      {kamarCandidates.length > 1 && (
+                        <Button
+                          size="sm" variant="outline"
+                          className="h-9 px-2.5 text-xs shrink-0"
+                          onClick={() => setShowKamarPicker(true)}
+                        >
+                          Ganti
+                        </Button>
+                      )}
+                    </div>
+                    {kamarWarning && (
+                      <p className="text-xs text-orange-600 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3 shrink-0" />{kamarWarning}
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <Input
+                    type="number" min={0}
+                    value={tarifKamar}
+                    onChange={e => setTarifKamar(Number(e.target.value) || 0)}
+                    className="h-9 text-sm"
+                  />
+                )}
               </div>
             </CardContent>
           </Card>
@@ -821,6 +847,24 @@ export default function CPPage() {
                         <div>
                           <div className="font-medium">Tambah Item Manual (Bulk)</div>
                           <div className="text-xs text-muted-foreground">Input banyak item sekaligus</div>
+                        </div>
+                      </button>
+                      <div className="border-t border-border/60 my-1" />
+                      <button
+                        className="w-full text-left px-4 py-2.5 text-sm hover:bg-accent transition-colors flex items-center gap-2.5"
+                        onClick={() => {
+                          setVdPickerOpen(true);
+                          setShowAddDropdown(false);
+                          setVdSpesialis('');
+                          setVdSelectedItem(null);
+                          setVdQtyStr(String(lamaRawat));
+                          setVdSearch('');
+                        }}
+                      >
+                        <Users className="w-3.5 h-3.5 text-purple-600" />
+                        <div>
+                          <div className="font-medium">Visit Dokter Spesialis</div>
+                          <div className="text-xs text-muted-foreground">Tambah visit & pilih tarif dari Master</div>
                         </div>
                       </button>
                     </div>
@@ -1436,6 +1480,167 @@ export default function CPPage() {
               ))
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Kamar Picker Dialog ── */}
+      <Dialog open={showKamarPicker} onOpenChange={setShowKamarPicker}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Pilih Tarif Kamar</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2 py-1">
+            <p className="text-sm text-muted-foreground">
+              Tersedia beberapa opsi tarif untuk <strong>{kelasKamar}</strong>. Pilih salah satu:
+            </p>
+            {kamarCandidates.map(it => (
+              <button
+                key={it.id}
+                onClick={() => { setTarifKamar(it.price); setShowKamarPicker(false); }}
+                className={`w-full text-left px-4 py-3 rounded-lg border transition-colors ${
+                  it.price === tarifKamar
+                    ? 'border-primary bg-primary/5 text-primary'
+                    : 'border-border hover:border-primary/40 hover:bg-muted/40'
+                }`}
+              >
+                <div className="font-medium text-sm">{it.orderItem}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{fmtRp(it.price)} / hari</div>
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Visit Dokter Spesialis Dialog ── */}
+      <Dialog open={vdPickerOpen} onOpenChange={v => { if (!v) setVdPickerOpen(false); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-purple-600" /> Visit Dokter Spesialis
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-1">
+
+            {/* Nama spesialis (free text) */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-semibold">
+                Nama Spesialis <span className="text-red-500">*</span>
+              </label>
+              <Input
+                autoFocus
+                value={vdSpesialis}
+                onChange={e => setVdSpesialis(e.target.value)}
+                placeholder="cth: Penyakit Dalam, Bedah, Anak, Saraf, Jantung..."
+                className="h-9 text-sm"
+              />
+            </div>
+
+            {/* Item dari Master Tarif (Visit Dokter category) */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-semibold">Nama Item (Visit Fee dari Master Tarif)</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  value={vdSearch}
+                  onChange={e => setVdSearch(e.target.value)}
+                  placeholder="Cari tarif visit dokter..."
+                  className="pl-10 h-9 text-sm"
+                />
+              </div>
+              <div className="border rounded-lg max-h-44 overflow-y-auto">
+                {(() => {
+                  const vdItems = filteredMasterItems.filter(it => isVisitDokterItem(it.orderItem));
+                  const shown = vdSearch.length >= 1
+                    ? vdItems.filter(it => it.orderItem.toLowerCase().includes(vdSearch.toLowerCase()))
+                    : vdItems;
+                  if (!hasMasterTarif || vdItems.length === 0) {
+                    return (
+                      <p className="text-sm text-muted-foreground text-center py-6 px-3">
+                        Tidak ada item Visit Dokter di Master Tarif untuk {kelasKamar}.
+                        Item akan disimpan tanpa tarif dari Master Tarif.
+                      </p>
+                    );
+                  }
+                  if (shown.length === 0) {
+                    return <p className="text-sm text-muted-foreground text-center py-6">Item tidak ditemukan.</p>;
+                  }
+                  return shown.slice(0, 30).map(it => (
+                    <button
+                      key={it.id}
+                      onClick={() => setVdSelectedItem(prev => prev?.id === it.id ? null : it)}
+                      className={`w-full text-left px-3 py-2.5 text-sm border-b last:border-0 flex justify-between items-center transition-colors ${
+                        vdSelectedItem?.id === it.id
+                          ? 'bg-primary/5 text-primary font-medium'
+                          : 'hover:bg-muted/50'
+                      }`}
+                    >
+                      <span className="truncate">{it.orderItem}</span>
+                      <span className="text-xs text-muted-foreground ml-2 shrink-0">{fmtRp(it.price)}</span>
+                    </button>
+                  ));
+                })()}
+              </div>
+              {vdSelectedItem && (
+                <div className="flex items-center justify-between bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-lg px-3 py-2">
+                  <div>
+                    <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">{vdSelectedItem.orderItem}</p>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-500">{fmtRp(vdSelectedItem.price)} / kunjungan</p>
+                  </div>
+                  <button onClick={() => setVdSelectedItem(null)} className="text-muted-foreground hover:text-foreground ml-2 shrink-0">
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Qty */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-sm font-semibold">Qty (Kunjungan)</label>
+                <Input
+                  type="text"
+                  inputMode="numeric"
+                  value={vdQtyStr}
+                  onChange={e => setVdQtyStr(e.target.value.replace(/[^0-9]/g, ''))}
+                  onBlur={() => {
+                    const v = Math.max(1, parseInt(vdQtyStr) || 1);
+                    setVdQtyStr(String(v));
+                  }}
+                  placeholder={String(lamaRawat)}
+                  className="h-9 text-sm"
+                />
+                <p className="text-xs text-muted-foreground">Default = lama rawat ({lamaRawat} hari)</p>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-semibold">Harga / Kunjungan</label>
+                <div className="h-9 px-3 rounded-md border border-input bg-muted text-sm flex items-center font-medium text-muted-foreground">
+                  {vdSelectedItem ? fmtRp(vdSelectedItem.price) : <span className="text-xs font-normal">— pilih item —</span>}
+                </div>
+              </div>
+            </div>
+
+            {vdSelectedItem && (parseInt(vdQtyStr) || lamaRawat) > 0 && (
+              <div className="flex justify-between bg-muted/50 rounded-lg px-3 py-2 text-sm">
+                <span className="text-muted-foreground">
+                  Subtotal ({parseInt(vdQtyStr) || lamaRawat} × {fmtRp(vdSelectedItem.price)})
+                </span>
+                <span className="font-bold text-primary">
+                  {fmtRp((parseInt(vdQtyStr) || lamaRawat) * vdSelectedItem.price)}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setVdPickerOpen(false)}>Batal</Button>
+            <Button
+              onClick={handleAddVisitDokter}
+              disabled={!vdSpesialis.trim()}
+              className="gap-1.5"
+            >
+              <Plus className="w-3.5 h-3.5" /> Tambah Visit Dokter
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

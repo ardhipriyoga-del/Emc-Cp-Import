@@ -66,7 +66,7 @@ export default function SettingsPage() {
     await db.put('users', {
       username: newUser.username,
       namaLengkap: newUser.namaLengkap,
-      role: newUser.role,
+      role: newUser.role as 'superuser' | 'officer',
       passwordHash: hashPassword(newUser.password),
       aktif: true,
       createdAt: Date.now(),
