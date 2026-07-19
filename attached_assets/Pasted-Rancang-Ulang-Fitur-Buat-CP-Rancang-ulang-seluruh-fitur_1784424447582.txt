@@ -1,0 +1,205 @@
+Rancang Ulang Fitur “Buat CP”
+
+Rancang ulang seluruh fitur Buat CP agar tampil lebih modern, sederhana, cepat digunakan, dan mudah dipahami oleh petugas Admission.
+
+Tujuan
+
+Fitur Buat CP digunakan untuk membuat estimasi biaya pasien berdasarkan Master Tarif rumah sakit. Seluruh perhitungan harus otomatis sehingga petugas hanya memilih data yang diperlukan tanpa menghitung secara manual.
+
+Tampilan
+
+Buat tampilan dalam bentuk wizard (step-by-step) atau satu halaman yang rapi dengan pembagian card.
+
+Langkah 1 - Informasi Pasien
+
+Input:
+
+* Nomor RM
+* Nama Pasien
+* Penjamin
+* Dokter
+* DPJP
+* Unit/Poli
+* Diagnosa
+* Tanggal Masuk
+* Perkiraan Lama Rawat (hari)
+
+⸻
+
+Langkah 2 - Pilih Kelas Perawatan
+
+Pilihan:
+
+* Kelas III
+* Kelas II
+* Kelas I
+* VIP
+* Suite
+
+Gunakan mapping otomatis ke Master Tarif.
+
+Mapping:
+
+* Kelas III → Class III
+* Kelas II → Class II
+* Kelas I → Class I
+* VIP → Class Premium / Mini VIP / VIP
+* Suite → Class Suite / VVIP / Super VIP
+
+Seluruh pencarian tarif wajib menggunakan mapping ini.
+
+⸻
+
+Langkah 3 - Tarif Kamar
+
+Setelah kelas dipilih:
+
+Aplikasi otomatis:
+
+* mencari tarif kamar
+* mengisi tarif per hari
+* mengisi qty sesuai lama rawat
+* menghitung subtotal
+
+User tetap dapat mengubah qty bila diperlukan.
+
+⸻
+
+Langkah 4 - Pilih Item Tarif
+
+Tampilkan daftar item berdasarkan kategori:
+
+* Visit Dokter
+* Laboratorium
+* Radiologi
+* Tindakan
+* OK
+* Farmasi
+* Alkes
+* BHP
+* Medical Supplies
+* Administrasi
+* Akomodasi
+* Penunjang
+* Lainnya
+
+Fitur:
+
+* Search cepat
+* Filter kategori
+* Checkbox pilih item
+* Qty dapat diedit
+* Harga otomatis dari Master Tarif
+* Subtotal otomatis
+
+⸻
+
+Langkah 5 - Ringkasan
+
+Tampilkan tabel:
+
+Kategori | Item | Qty | Tarif | Subtotal
+
+Di bagian bawah tampilkan:
+
+* Total Kamar
+* Total Visit
+* Total Laboratorium
+* Total Radiologi
+* Total Tindakan
+* Total Farmasi
+* Total Administrasi
+* Grand Total
+
+Semua total dihitung otomatis.
+
+⸻
+
+Fitur Tambahan
+
+Tambahkan:
+
+* Auto Save Draft
+* Load Draft
+* Duplikasi CP
+* Hapus Draft
+* Riwayat CP
+* Cetak
+* Export PDF
+* Export Excel
+
+⸻
+
+Validasi
+
+Jika tarif tidak ditemukan:
+
+Tampilkan informasi:
+
+“Tarif belum tersedia pada Master Tarif.”
+
+Jangan membuat harga nol tanpa pemberitahuan.
+
+⸻
+
+Performa
+
+Optimalkan agar:
+
+* pencarian sangat cepat
+* tidak reload halaman
+* menggunakan cache data Master Tarif
+* harga diperbarui otomatis ketika kelas berubah
+
+⸻
+
+User Experience
+
+Saat kelas berubah:
+
+* seluruh harga otomatis diperbarui
+* tarif kamar berubah otomatis
+* item yang tidak sesuai kelas disembunyikan
+* total dihitung ulang tanpa refresh halaman
+
+⸻
+
+Desain
+
+Gunakan desain modern:
+
+* Card layout
+* Sticky ringkasan total di sisi kanan (desktop) atau bagian bawah (mobile)
+* Ikon pada setiap kategori
+* Warna hijau sebagai warna utama
+* Responsive
+* Dark mode siap digunakan
+
+⸻
+
+Struktur Kode
+
+Pisahkan menjadi beberapa modul:
+
+* Master Tarif
+* Mapping Kelas
+* Mesin Perhitungan
+* Ringkasan
+* Export
+* Draft
+* Validasi
+
+Jangan menggabungkan seluruh logika dalam satu file.
+
+⸻
+
+Target Akhir
+
+Fitur Buat CP harus terasa seperti aplikasi profesional rumah sakit:
+
+* cepat
+* minim klik
+* mudah dipahami
+* seluruh tarif berasal dari Master Tarif
+* semua perhitungan otomatis
+* mudah dikembangkan untuk kebutuhan rumah sakit di masa mendatang.
