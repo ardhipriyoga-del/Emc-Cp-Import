@@ -26,7 +26,7 @@ export default function DownloadPage() {
   const fileUrl = `${import.meta.env.BASE_URL}emc-admission-app.html`;
 
   const steps = [
-    'Klik tombol Download di bawah — file HTML (~2.3 MB) akan tersimpan ke perangkat Anda.',
+    'Klik tombol Download di bawah — file HTML (± 2.4 MB) akan tersimpan ke perangkat Anda.',
     'Pindahkan file ke komputer offline menggunakan flashdisk.',
     'Di komputer offline, klik dua kali file HTML untuk membukanya di Google Chrome.',
     'Aplikasi langsung berjalan — tidak memerlukan internet maupun instalasi apapun.',
@@ -52,14 +52,14 @@ export default function DownloadPage() {
           <div className="flex-1 space-y-1">
             <div className="flex items-center gap-2">
               <HardDrive className="w-5 h-5 text-primary" />
-              <span className="font-semibold text-base">emc-admission-app.html</span>
+              <span className="font-semibold text-base">ip-admission-workspace.html</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Satu file HTML · Semua fitur lengkap · Berjalan 100% offline
             </p>
-            <p className="text-xs text-muted-foreground">Ukuran: ± 2.3 MB</p>
+            <p className="text-xs text-muted-foreground">Ukuran: ± 2.4 MB</p>
           </div>
-          <a href={fileUrl} download="emc-admission-app.html">
+          <a href={fileUrl} download="ip-admission-workspace.html">
             <Button size="lg" className="gap-2 w-full sm:w-auto">
               <Download className="w-5 h-5" />
               Download Sekarang
