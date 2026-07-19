@@ -57,34 +57,42 @@ const emptyCustomForm = () => ({
 // ── Kelas Kamar → Master Tarif mapping (single source of truth) ──────────────
 //
 // Patient data uses:  "Kelas III" | "Kelas II" | "Kelas I" | "VIP" | "Suite" | "ICU" | "HCU" | "Isolasi"
-// Master Tarif uses:  "Class III" | "Class II" | "Class I" | "VIP" | "Suite" | "Premium" | "ICU" | "HCU" | "Isolasi"
+// Master Tarif uses one or more of the values below per kelas.
+//
+// VIP dan Suite menggunakan logika OR — item yang memiliki salah satu
+// kelas yang terdaftar akan dicocokkan.
 //
 // Add/update entries here only — no other place needs to change.
-const KELAS_MAP: Record<string, string> = {
-  'Kelas III': 'Class III',
-  'Kelas II':  'Class II',
-  'Kelas I':   'Class I',
-  'VIP':       'VIP',
-  'Suite':     'Suite',
-  'Premium':   'Premium',
-  'ICU':       'ICU',
-  'HCU':       'HCU',
-  'Isolasi':   'Isolasi',
+const KELAS_MAP: Record<string, string[]> = {
+  'Kelas III': ['Class III'],
+  'Kelas II':  ['Class II'],
+  'Kelas I':   ['Class I'],
+  'VIP':       ['Class Premium', 'Mini VIP', 'VIP'],
+  'Suite':     ['Class Suite', 'VVIP', 'Super VIP'],
+  'ICU':       ['ICU'],
+  'HCU':       ['HCU'],
+  'Isolasi':   ['Isolasi'],
 };
 
 /**
- * Returns the Master Tarif class string that corresponds to the patient's
- * room class. Falls back to the raw value if the kelas is not in the map.
+ * Returns the list of Master Tarif class strings that correspond to the
+ * patient's room class. Falls back to a single-element array of the raw
+ * value if the kelas is not in the map.
  */
-const toMasterTarifKelas = (kelasKamar: string): string =>
-  KELAS_MAP[kelasKamar] ?? kelasKamar;
+const toMasterTarifKelas = (kelasKamar: string): string[] =>
+  KELAS_MAP[kelasKamar] ?? [kelasKamar];
 
 /**
  * True if a Master Tarif kelasTarif value matches the patient's room class.
  * Comparison is case-insensitive and ignores leading/trailing whitespace.
+ * For VIP and Suite, any one of the mapped class names is sufficient (OR logic).
  */
-const matchesKelas = (kelasTarif: string, kelasKamar: string): boolean =>
-  kelasTarif.trim().toLowerCase() === toMasterTarifKelas(kelasKamar).trim().toLowerCase();
+const matchesKelas = (kelasTarif: string, kelasKamar: string): boolean => {
+  const normalized = kelasTarif.trim().toLowerCase();
+  return toMasterTarifKelas(kelasKamar).some(
+    mapped => mapped.trim().toLowerCase() === normalized
+  );
+};
 
 /**
  * Keywords that indicate a Master Tarif item is a ward/room accommodation charge.
@@ -265,8 +273,7 @@ export default function CPPage() {
     // Identify accommodation/room candidates
     const kamarItems = filtered.filter(it => isKamarItem(it.orderItem));
     if (kamarItems.length === 0) {
-      const mappedKelas = toMasterTarifKelas(kelasKamar);
-      setKamarWarning(`Tidak ada item Master Tarif untuk ${mappedKelas}.`);
+      setKamarWarning('Tidak ada tarif untuk kelas kamar yang dipilih.');
       setKamarCandidates([]);
     } else if (kamarItems.length === 1) {
       setKamarWarning('');
