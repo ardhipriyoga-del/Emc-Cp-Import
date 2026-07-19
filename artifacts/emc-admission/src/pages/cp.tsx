@@ -19,7 +19,16 @@ import {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const KELAS_KAMAR = ['Kelas III', 'Kelas II', 'Kelas I', 'VIP', 'Suite', 'ICU', 'HCU', 'Isolasi'];
+// Pilihan kelas kamar yang dapat dipilih user pada form CP.
+// Sesuai spec: hanya 5 kelas perawatan standar.
+const KELAS_KAMAR = ['Kelas III', 'Kelas II', 'Kelas I', 'VIP', 'Suite'] as const;
+type KelasKamar = typeof KELAS_KAMAR[number];
+
+/** Normalise patient.roomType → valid CP kelas. Falls back to 'Kelas I'. */
+const normaliseKelas = (rawKelas: string): KelasKamar =>
+  (KELAS_KAMAR as readonly string[]).includes(rawKelas)
+    ? (rawKelas as KelasKamar)
+    : 'Kelas I';
 
 const CP_KATEGORI = [
   'Kamar', 'Laboratorium', 'Radiologi', 'Farmasi', 'Alkes', 'BHP',
@@ -56,38 +65,31 @@ const emptyCustomForm = () => ({
 
 // ── Kelas Kamar → Master Tarif mapping (single source of truth) ──────────────
 //
-// Patient data uses:  "Kelas III" | "Kelas II" | "Kelas I" | "VIP" | "Suite" | "ICU" | "HCU" | "Isolasi"
-// Master Tarif uses one or more of the values below per kelas.
-//
-// VIP dan Suite menggunakan logika OR — item yang memiliki salah satu
-// kelas yang terdaftar akan dicocokkan.
+// User selects one of 5 kelas; the app maps it to one or more Master Tarif
+// class strings (OR logic for VIP and Suite).
 //
 // Add/update entries here only — no other place needs to change.
-const KELAS_MAP: Record<string, string[]> = {
+const KELAS_MAP: Record<KelasKamar, string[]> = {
   'Kelas III': ['Class III'],
   'Kelas II':  ['Class II'],
   'Kelas I':   ['Class I'],
   'VIP':       ['Class Premium', 'Mini VIP', 'VIP'],
   'Suite':     ['Class Suite', 'VVIP', 'Super VIP'],
-  'ICU':       ['ICU'],
-  'HCU':       ['HCU'],
-  'Isolasi':   ['Isolasi'],
 };
 
 /**
  * Returns the list of Master Tarif class strings that correspond to the
- * patient's room class. Falls back to a single-element array of the raw
- * value if the kelas is not in the map.
+ * selected kelas kamar (from the 5-item KELAS_MAP).
  */
-const toMasterTarifKelas = (kelasKamar: string): string[] =>
-  KELAS_MAP[kelasKamar] ?? [kelasKamar];
+const toMasterTarifKelas = (kelasKamar: KelasKamar): string[] =>
+  KELAS_MAP[kelasKamar];
 
 /**
- * True if a Master Tarif kelasTarif value matches the patient's room class.
- * Comparison is case-insensitive and ignores leading/trailing whitespace.
- * For VIP and Suite, any one of the mapped class names is sufficient (OR logic).
+ * True if a Master Tarif kelasTarif value matches the selected kelas kamar.
+ * - Case-insensitive, trims whitespace.
+ * - VIP and Suite use OR logic: any mapped class name is sufficient.
  */
-const matchesKelas = (kelasTarif: string, kelasKamar: string): boolean => {
+const matchesKelas = (kelasTarif: string, kelasKamar: KelasKamar): boolean => {
   const normalized = kelasTarif.trim().toLowerCase();
   return toMasterTarifKelas(kelasKamar).some(
     mapped => mapped.trim().toLowerCase() === normalized
@@ -155,7 +157,7 @@ export default function CPPage() {
 
   // Working CP state
   const [diagnosaPrimer, setDiagnosaPrimer] = useState('');
-  const [kelasKamar, setKelasKamar] = useState('Kelas I');
+  const [kelasKamar, setKelasKamar] = useState<KelasKamar>('Kelas I');
   const [lamaRawat, setLamaRawat] = useState(1);
   const [tarifKamar, setTarifKamar] = useState(0);
   const [dpjp, setDpjp] = useState('');
@@ -273,7 +275,7 @@ export default function CPPage() {
     // Identify accommodation/room candidates
     const kamarItems = filtered.filter(it => isKamarItem(it.orderItem));
     if (kamarItems.length === 0) {
-      setKamarWarning('Tidak ada tarif untuk kelas kamar yang dipilih.');
+      setKamarWarning('Tarif untuk kelas kamar yang dipilih belum tersedia pada Master Tarif.');
       setKamarCandidates([]);
     } else if (kamarItems.length === 1) {
       setKamarWarning('');
@@ -289,14 +291,19 @@ export default function CPPage() {
       });
     }
 
-    // Re-price existing master_tarif items when kelas changes
+    // Re-price existing master_tarif items when kelas changes.
+    // Spec: "Tidak boleh menggunakan cache harga dari kelas sebelumnya."
+    // If an item has no match in the new kelas → price reset to 0, not kept from old kelas.
     setItems(prev => prev.map(it => {
       if (it.sumber !== 'master_tarif') return it;
       const match = filtered.find(m =>
         m.id === it.masterTarifItemId ||
-        m.orderItem.toLowerCase() === it.namaItem.toLowerCase()
+        m.orderItem.toLowerCase().trim() === it.namaItem.toLowerCase().trim()
       );
-      if (!match) return it;
+      if (!match) {
+        // Item not available for the new kelas — clear price so user is aware
+        return { ...it, hargaSatuan: 0, subtotal: 0 };
+      }
       return { ...it, hargaSatuan: match.price, subtotal: it.qty * match.price };
     }));
   }, [kelasKamar, masterItems, hasMasterTarif]);
@@ -310,7 +317,8 @@ export default function CPPage() {
     setCurrentCpId(id);
     setActiveCpId('new');
     setDiagnosaPrimer(pt.diagnosaMasuk || pt.diagnosakUtama || '');
-    setKelasKamar(pt.roomType || 'Kelas I');
+    // Normalise: if patient roomType is ICU/HCU/etc. (not in 5-item list), default to Kelas I
+    setKelasKamar(normaliseKelas(pt.roomType || 'Kelas I'));
     setLamaRawat(1);
     setTarifKamar(0);
     setDpjp(pt.dpjp || '');
@@ -323,7 +331,7 @@ export default function CPPage() {
     setCurrentCpId(cp.id);
     setActiveCpId(cp.id);
     setDiagnosaPrimer(cp.diagnosaPrimer);
-    setKelasKamar(cp.kelasKamar);
+    setKelasKamar(normaliseKelas(cp.kelasKamar));
     setLamaRawat(cp.lamaRawat);
     setTarifKamar(cp.tarifKamar);
     setDpjp(cp.dpjp);
@@ -597,7 +605,7 @@ export default function CPPage() {
   };
 
   const handleLoadTemplate = (tmpl: CPTemplate) => {
-    setKelasKamar(tmpl.kelasKamar);
+    setKelasKamar(normaliseKelas(tmpl.kelasKamar));
     setLamaRawat(tmpl.lamaRawat);
     setTarifKamar(tmpl.tarifKamar);
     setItems(tmpl.items.map(it => ({ ...it, id: generateUUID() })));
@@ -768,7 +776,7 @@ export default function CPPage() {
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Kelas Kamar</label>
                 <select
                   value={kelasKamar}
-                  onChange={e => setKelasKamar(e.target.value)}
+                  onChange={e => setKelasKamar(e.target.value as KelasKamar)}
                   className="h-9 w-full px-3 rounded-md border border-input bg-background text-sm"
                 >
                   {KELAS_KAMAR.map(k => <option key={k} value={k}>{k}</option>)}
@@ -1186,10 +1194,21 @@ export default function CPPage() {
 
           <div className="flex-1 overflow-y-auto border rounded-lg">
             {masterSearchResults.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground text-sm px-4">
-                {!masterKatFilter && masterSearch.length < 2
-                  ? 'Ketik nama item / kode, atau pilih kategori untuk mulai mencari.'
-                  : 'Item tidak ditemukan. Coba kata kunci lain atau pilih Item Custom.'}
+              <div className="text-center py-12 text-muted-foreground text-sm px-4 space-y-1">
+                {filteredMasterItems.length === 0 ? (
+                  // No items at all for this kelas in master tarif
+                  <>
+                    <AlertCircle className="w-6 h-6 mx-auto text-orange-400 mb-2" />
+                    <p className="font-medium text-orange-600 dark:text-orange-400">
+                      Tarif untuk kelas kamar yang dipilih belum tersedia pada Master Tarif.
+                    </p>
+                    <p className="text-xs">Kelas: <strong>{kelasKamar}</strong> · Pastikan Master Tarif sudah diupload dan memiliki data untuk kelas ini.</p>
+                  </>
+                ) : !masterKatFilter && masterSearch.length < 2 ? (
+                  'Ketik nama item / kode (min. 2 huruf), atau pilih kategori untuk mulai mencari.'
+                ) : (
+                  'Item tidak ditemukan. Coba kata kunci lain atau tambahkan Item Custom.'
+                )}
               </div>
             ) : (
               <table className="w-full text-sm">

@@ -1,0 +1,127 @@
+Perbaiki logika Kelas Kamar Perawatan pada fitur "Buat CP".
+
+Alur kerja yang diharapkan:
+
+1. User memilih Kelas Kamar Perawatan:
+
+   - Kelas III
+
+   - Kelas II
+
+   - Kelas I
+
+   - VIP
+
+   - Suite
+
+2. Setelah kelas dipilih, aplikasi membuat mapping ke Master Tarif:
+
+   Kelas III
+
+   → Class III
+
+   Kelas II
+
+   → Class II
+
+   Kelas I
+
+   → Class I
+
+   VIP
+
+   → Class Premium
+
+   → Mini VIP
+
+   → VIP
+
+   Suite
+
+   → Class Suite
+
+   → VVIP
+
+   → Super VIP
+
+3. Mapping digunakan pada seluruh proses pencarian tarif, yaitu:
+
+   - Tarif kamar/hari
+
+   - Pemeriksaan Laboratorium
+
+   - Radiologi
+
+   - Tindakan
+
+   - Akomodasi
+
+   - Visit Dokter
+
+   - BHP
+
+   - Alkes
+
+   - Medical Supplies
+
+   - Semua item lain yang memiliki kolom Class pada Master Tarif.
+
+4. Saat user menambahkan item:
+
+   - Aplikasi hanya menampilkan item yang sesuai dengan mapping kelas yang dipilih.
+
+   - Item dari kelas lain tidak boleh muncul.
+
+   - Harga otomatis diambil dari Master Tarif sesuai kelas tersebut.
+
+5. Jika suatu item memiliki lebih dari satu kelas pada Master Tarif:
+
+   - Pilih harga yang sesuai dengan kelas yang dipilih user.
+
+   - Jangan mengambil harga dari kelas lain.
+
+6. Tarif kamar/hari:
+
+   - Setelah kelas dipilih, aplikasi otomatis mencari item kamar yang sesuai.
+
+   - Tarif kamar/hari langsung terisi.
+
+   - Qty default = 1.
+
+   - Qty tetap dapat diedit oleh user.
+
+7. Jika user mengganti kelas kamar:
+
+   - Seluruh daftar item harus dimuat ulang.
+
+   - Tarif kamar/hari diperbarui.
+
+   - Harga seluruh item diperbarui sesuai kelas baru.
+
+   - Tidak boleh menggunakan cache harga dari kelas sebelumnya.
+
+8. Pencarian harus:
+
+   - Tidak membedakan huruf besar/kecil.
+
+   - Mengabaikan spasi di awal dan akhir.
+
+   - Mendukung pencarian sebagian (misalnya "VIP", "Mini VIP", "Class Premium", "Super VIP", dan sebagainya).
+
+9. Jika tidak ditemukan tarif:
+
+   - Tampilkan pesan:
+
+     "Tarif untuk kelas kamar yang dipilih belum tersedia pada Master Tarif."
+
+10. Semua fitur CP wajib menggunakan satu fungsi mapping yang sama (single source of truth), sehingga tidak ada perbedaan logika antara pencarian item, tarif kamar, maupun estimasi biaya.
+
+Tujuan utama:
+
+- User cukup memilih kelas kamar satu kali.
+
+- Semua item dan harga otomatis menyesuaikan kelas tersebut.
+
+- Tidak ada item atau harga dari kelas lain yang muncul.
+
+- Perubahan kelas kamar langsung memperbarui seluruh estimasi biaya secara otomatis.
