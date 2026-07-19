@@ -70,11 +70,13 @@ const emptyCustomForm = () => ({
 //
 // Add/update entries here only — no other place needs to change.
 const KELAS_MAP: Record<KelasKamar, string[]> = {
-  'Kelas III': ['Class III'],
-  'Kelas II':  ['Class II'],
-  'Kelas I':   ['Class I'],
+  'Kelas III': ['Class III', 'Kelas III', 'Class 3'],
+  'Kelas II':  ['Class II',  'Kelas II',  'Class 2'],
+  'Kelas I':   ['Class I',   'Kelas I',   'Class 1'],
+  // VIP: semua nilai yang mungkin dipakai di Master Tarif, termasuk nilai lama "VIP"
   'VIP':       ['Class Premium', 'Mini VIP', 'VIP'],
-  'Suite':     ['Class Suite', 'VVIP', 'Super VIP'],
+  // Suite: tambahkan "Suite" sebagai fallback untuk data Master Tarif yang memakai nilai lama
+  'Suite':     ['Class Suite', 'VVIP', 'Super VIP', 'Suite'],
 };
 
 /**
@@ -102,13 +104,20 @@ const matchesKelas = (kelasTarif: string, kelasKamar: KelasKamar): boolean => {
  *
  * EXCLUDE takes priority — e.g. "Kamar Operasi" contains "kamar" (include)
  * but also "operasi" (exclude), so it is correctly rejected.
+ *
+ * 'vip' and 'suite' are in INCLUDE so room items named "VIP", "Suite",
+ * "Kamar VIP", "Suite Room", etc. are detected correctly.
+ * 'visit', 'visite', 'jasa dokter' are in EXCLUDE so visit/doctor-fee items
+ * that happen to contain "VIP" (e.g. "Tarif Visit Dokter VIP") are rejected.
  */
 const KAMAR_INCLUDE_KEYWORDS = [
-  'akomodasi', 'kamar', 'rawat inap', 'room', 'perawatan kamar',
+  'akomodasi', 'kamar', 'rawat inap', 'inap', 'room', 'perawatan kamar',
   'icu', 'hcu', 'isolasi', 'intensif', 'intermediate',
+  'vip', 'suite',
 ];
 const KAMAR_EXCLUDE_KEYWORDS = [
   'operasi', 'kamar ok', 'ok besar', 'ok kecil', 'operating', 'bedah sentral',
+  'visit', 'visite', 'jasa dokter', 'konsultasi',
 ];
 const isKamarItem = (name: string) => {
   const lower = name.toLowerCase();
